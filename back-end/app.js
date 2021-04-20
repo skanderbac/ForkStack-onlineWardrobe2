@@ -4,12 +4,11 @@ var path = require('path');
 const dotenv=require('dotenv');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var routes= require('./routes/routing');
+var gloabalRouter= require('./routes/routing');
 const cors = require('cors');
 var config =require('./database/mongodb.json');
 var mongoose =require('mongoose');
-var wardrrobeRouter=require('./controllers/wardrobeController');
-
+const WardrobeRouting = require('./routes/WardrobeRouting')
 dotenv.config();
 var app = express();
 app.use(cors());
@@ -26,11 +25,18 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(routes);
-//app.use('/wardrobe',wardrrobeRouter);
-//app.use('/', indexRouter);
-//app.use('/users', usersRouter);
+app.use("/robe",WardrobeRouting)
+
+ app.use("/test", gloabalRouter);
+
+// app.use('/wardrobe',wardrrobeRouter);
+// app.use('/', indexRouter);
+// app.use('/users', usersRouter);
+
 // catch 404 and forward to error handler
+
+
+
 app.use(function(req, res, next) {
   next(createError(404));
 });

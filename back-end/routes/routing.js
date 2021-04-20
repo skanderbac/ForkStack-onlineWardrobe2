@@ -2,7 +2,6 @@ var express = require('express');
 const { route } = require('../app');
 var router = express.Router();
 var multer =require('multer');
-var Dresses=require('../model/dresses');
 
 //Import controller
 var index =require( '../controllers/index');
@@ -20,7 +19,7 @@ const storage=multer.diskStorage({
     
 });
 const upload=multer({storage:storage});
-router.post('/pic',DressesController.add);
+
 
 router.get('/all',index.getAll);
 //Router for userController
@@ -39,6 +38,7 @@ router.post('/postwardrobe1',upload.single('image'),wardrobeController.createWar
 router.post('/hello',index.postUser1);
 
 //router.post('/addDress',upload.single('image'),DressesController.add);
+router.post('/pic',DressesController.add);
 router.get('/allDresses',DressesController.getDresses);
 router.delete('/deleteDress/:id',DressesController.delete);
 

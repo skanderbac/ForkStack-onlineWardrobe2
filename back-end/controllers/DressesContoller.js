@@ -15,17 +15,18 @@ DressesController.getDresses=async(req,res)=>{
 };
 
 DressesController.add=async(req,res)=>{
-    var dress = new Dresses(
-        req.body
-    );
-    try{
-        const savedDress =await dress.save();
-
-    }catch(err){
-        res.status(400).send(err);
+    try {
+        const doc = await Dresses.create(req.body);
+    
+        res.status(201).json({
+          status: "success",
+          data: doc
+         
+        });
+      } catch (error) {
+        next(error);
+      }
     }
-};
-
 
 DressesController.delete=async(req,res)=>{
     User.deleteOne({_id:req.params.id})
