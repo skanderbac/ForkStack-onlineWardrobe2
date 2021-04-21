@@ -20,6 +20,10 @@ export const WardrobeSlice = createSlice({
         getwardrobe: ( state ,action)=> {
             state.values = action.payload
         },
+        deletewardrobe:(state ,action)=>{
+            const payload=action.payload;
+            state.values=state.values.filter((dress)=>dress._id!==payload);
+        }
 
     },
     extraReducers: {
@@ -32,7 +36,8 @@ export const WardrobeSlice = createSlice({
 });
 
 export const {
- getwardrobe
+ getwardrobe,
+    deletewardrobe
 } = WardrobeSlice.actions;
 
 //thunk
@@ -46,7 +51,14 @@ export const affichage = () => async (dispatch) => {
       console.log(error.message);
     }
   };
-
+export const supprimer = (id) => async (dispatch) => {
+    try {
+        await api.deleteDresses(id);
+        dispatch(deletewardrobe(id));
+    } catch (error) {
+        console.log(error.message);
+    }
+};
 export const selectwardrobe = (state) => state.Wardrobe.values;
 
 export default WardrobeSlice.reducer;

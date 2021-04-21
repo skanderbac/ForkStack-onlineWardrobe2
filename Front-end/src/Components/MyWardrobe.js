@@ -4,7 +4,7 @@ import {Button,Modal} from "react-bootstrap";
 import AddWardrobeLeft from "./AddWardrobeLeft";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { affichage, selectwardrobe } from "../Pages/WardrobeSlice";
+import {affichage, selectwardrobe, supprimer} from "../Pages/WardrobeSlice";
 import { useSelector } from "react-redux";
 
 export default function Categories(props) {
@@ -13,7 +13,8 @@ export default function Categories(props) {
     const [selectedd,setSelectedd] = React.useState(0);
     const [selectedImg,setSelectedImg] = React.useState("");
     const dispatch = useDispatch()
-    const  Dresses = useSelector(selectwardrobe )
+    const  Dresses = useSelector(selectwardrobe );
+
     useEffect(() => {
         dispatch(affichage())
 
@@ -84,7 +85,7 @@ export default function Categories(props) {
                data-image="assets/images/products/single/1.jpg"
                data-zoom-image= {card.image}
                onClick={
-                   () => {setSelected(index);setSelectedImg(card.image); console.log(index)}
+                   () => {setSelected(card._id);setSelectedImg(card.image); console.log(index)}
                }
             >
                 <img
@@ -148,7 +149,7 @@ export default function Categories(props) {
     };
 
     const deleteCloth=(index)=>{
-        //
+        dispatch(supprimer(index))
     };
 
     const [selectedBox,setSelectedBox] = React.useState(Dresses.map(renderCard));
@@ -184,7 +185,7 @@ export default function Categories(props) {
 
                                                 <a href="#" id="btn-product-gallery"
                                                    className="btn-product-gallery"
-                                                    onClick={()=>deleteCloth(selectedImg) }
+                                                    onClick={()=>deleteCloth(selected) }
                                                 >
                                                     <i className="icon-close"/>
                                                 </a>
