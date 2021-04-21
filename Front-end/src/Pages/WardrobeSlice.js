@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import  * as api from "../utils/wardrobe";
+
+
 export const createwardrobe = createAsyncThunk(
     "wardrobe",
     async (dresses, thunkAPI) => {
@@ -11,20 +13,40 @@ export const createwardrobe = createAsyncThunk(
 let initialState = {
     values: [],
 };
-export const coursesSlice = createSlice({
+export const WardrobeSlice = createSlice({
     name: "Wardrobe",
     initialState,
     reducers: {
-        getwardrobe: ( state ,action) {
+        getwardrobe: ( state ,action)=> {
             state.values = action.payload
         },
 
     },
+    extraReducers: {
+        [createwardrobe.fulfilled]: (state, action) => {
+          state.values.push(action.payload.data);
+        },
+      },
 
 
 });
 
 export const {
+ getwardrobe
+} = WardrobeSlice.actions;
 
-} = coursesSlice.actions;
+//thunk
+export const affichage = () => async (dispatch) => {
+    try {
+      const { data } = await api.getDresses();
+  
+      dispatch(getwardrobe(data));
+      console.log(data)
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
+export const selectwardrobe = (state) => state.Wardrobe.values;
+
+export default WardrobeSlice.reducer;

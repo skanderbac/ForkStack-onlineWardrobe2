@@ -2,11 +2,11 @@ var  mongoose=require('mongoose');
 var Schema =mongoose.Schema;
 var Dresses=new Schema({
 
-    
+
     image:{
         type:String,
     },
-    imagebig: {
+    description: {
         type: String,
     }
 });

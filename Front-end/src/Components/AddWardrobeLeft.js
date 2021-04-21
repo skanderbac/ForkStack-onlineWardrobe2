@@ -1,54 +1,42 @@
-import {useFormik,Field} from "formik";
-import React from "react";
-export default function AddWardrobeLeft(props){
-    const validate = values => {
-        const errors = {};
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { createwardrobe } from '../Pages/WardrobeSlice'
+import FileBase from "react-file-base64";
 
-        if (!values.image) {
-            errors.image = 'Please Choose a Picture'
-        }
-        return errors
-    };
-    const formik = useFormik({
+function AddWardrobeLeft() {
 
-        initialValues: {
-            image: '',
-        },
-        validate,
-        onSubmit: values => {
-            alert(JSON.stringify(values, null, 2));
-        }
-    });
+    const dispatch = useDispatch()
+    const [dress, setdress] = useState({image :"" , description:""})
 
-    return(
-        <>
-            <div className="soon-content-wrapper">
-                <form onSubmit={formik.handleSubmit}>
-                    <div className="form-group">
-                        <label>Choose a file from your device</label><br/>
-                        <input type="file"
-                               placeholder="App you clothes Pictures"
-                               name="image"
-                               id="image"
-                               onChange={formik.handleChange}
-                               onBlur={formik.handleBlur}
+    const submit= ()=> {
+        dispatch(createwardrobe(dress))
+        console.log(dress)
+    }
 
-                               onChange={(event) => {
-                                   formik.
-                                   setFieldValue("image", event.target.files[0]);
-                               }}
-                        />
-                        {formik.touched.image && formik.errors.image ? <div className='error'>{formik.errors.image}</div> : null}
-                    </div>
-                    <div className="input-group mb-5">
-                        <div className="input-group-append">
-                            <button className="btn btn-primary btn-rounded" type="submit"disabled={!(formik.isValid && formik.dirty)}><span>Add</span><i
-                                className="icon-long-arrow-right"/></button>
-                        </div>
-                    </div>
-                </form>
+    return (
+        <div>
 
-            </div>
-            </>
+            <div> 
+                <input type="text" placeholder="description" onChange={(e) =>
+                setdress({ ...dress, description: e.target.value })
+              }
+              />
+
+                <FileBase  
+                type="file"
+                multiple={false}
+                onDone={({ base64 }) =>
+                setdress({ ...dress, image: base64 })
+                }
+                
+                />
+
+
+                <button onClick={submit}> submit </button>
+             </div>
+            
+        </div>
     )
 }
+
+export default AddWardrobeLeft

@@ -77,10 +77,7 @@ function App() {
                                         path="/preferences"
                                         render={(props) => <Preferences {...props} />}
                                     ></Route>
-                                    <Route
-                                        path="/mywardrobe"
-                                        render={(props) => <MyWardrobe {...props} />}
-                                    ></Route>
+                                    
                                 </Switch>
 
                             ) : (
@@ -107,6 +104,11 @@ function App() {
                                     <Route
                                         path="/choices"
                                         render={(props) => <Choises {...props} />}></Route>
+                                        <Route
+                                        path="/mywardrobe"
+                                        render={(props) => <MyWardrobe {...props} />}
+                                    ></Route>
+                                        
                                     <Route
                                         path="/register"
                                         render={(props) => <Register {...props} />}></Route>

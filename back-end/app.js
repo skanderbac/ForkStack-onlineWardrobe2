@@ -22,12 +22,12 @@ app.set('view engine', 'jade');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use("/robe",WardrobeRouting)
 
- app.use("/test", gloabalRouter);
+app.use("/test", gloabalRouter);
 
 // app.use('/wardrobe',wardrrobeRouter);
 // app.use('/', indexRouter);

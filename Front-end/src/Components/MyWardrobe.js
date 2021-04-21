@@ -1,14 +1,25 @@
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import {Link,useHistory} from "react-router-dom";
 import {Button,Modal} from "react-bootstrap";
 import AddWardrobeLeft from "./AddWardrobeLeft";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { affichage, selectwardrobe } from "../Pages/WardrobeSlice";
+import { useSelector } from "react-redux";
 
 export default function Categories(props) {
     const history=useHistory();
     const [selected,setSelected] = React.useState(0);
     const [selectedd,setSelectedd] = React.useState(0);
     const [selectedImg,setSelectedImg] = React.useState("");
+    const dispatch = useDispatch()
+    const  Dresses = useSelector(selectwardrobe )
+    useEffect(() => {
+        dispatch(affichage())
+
+    }, [dispatch])
+
+
     const BoxColor = {
         color:'#cc9966'
     };
@@ -48,35 +59,36 @@ export default function Categories(props) {
 
     /*const DressesInfo=[axios.get("http://localhost:3000/allDresses").then(response =>{ return response})];
     console.log(DressesInfo);*/
-    const DressesInfo=[
-        {
-            image:"https://portotheme.com/html/molla/assets/images/products/single/1-small.jpg",
-            imagebig:"https://portotheme.com/html/molla/assets/images/products/single/1-big.jpg"
-        },
-        {
-            image:"https://portotheme.com/html/molla/assets/images/products/single/2-small.jpg",
-            imagebig:"https://portotheme.com/html/molla/assets/images/products/single/2-big.jpg"
-        },
-        {
-            image:"https://portotheme.com/html/molla/assets/images/products/single/3-small.jpg",
-            imagebig:"https://portotheme.com/html/molla/assets/images/products/single/3-big.jpg"
-        },
-        {
-            image:"https://portotheme.com/html/molla/assets/images/products/single/4-small.jpg",
-            imagebig:"https://portotheme.com/html/molla/assets/images/products/single/4-big.jpg"
-        },
-    ];
+    // const DressesInfo=[
+    //     {
+    //         image:"https://portotheme.com/html/molla/assets/images/products/single/1-small.jpg",
+    //         imagebig:"https://portotheme.com/html/molla/assets/images/products/single/1-big.jpg"
+    //     },
+    //     {
+    //         image:"https://portotheme.com/html/molla/assets/images/products/single/2-small.jpg",
+    //         imagebig:"https://portotheme.com/html/molla/assets/images/products/single/2-big.jpg"
+    //     },
+    //     {
+    //         image:"https://portotheme.com/html/molla/assets/images/products/single/3-small.jpg",
+    //         imagebig:"https://portotheme.com/html/molla/assets/images/products/single/3-big.jpg"
+    //     },
+    //     {
+    //         image:"https://portotheme.com/html/molla/assets/images/products/single/4-small.jpg",
+    //         imagebig:"https://portotheme.com/html/molla/assets/images/products/single/4-big.jpg"
+    //     },
+    // ];
     const renderCard = (card,index) => {
         return(
+            // eslint-disable-next-line jsx-a11y/anchor-is-valid
             <a className={"product-gallery-item "+ (selected === index && cardSelect) }  key={index}
                data-image="assets/images/products/single/1.jpg"
-               data-zoom-image= {card.imagebig}
+               data-zoom-image= {card.image}
                onClick={
-                   () => {setSelected(index);setSelectedImg(card.imagebig); console.log(index)}
+                   () => {setSelected(index);setSelectedImg(card.image); console.log(index)}
                }
             >
                 <img
-                    src={card.image}
+                    src={card.image} 
                     alt="product side"/>
             </a>
         );
@@ -113,7 +125,7 @@ export default function Categories(props) {
         switch (indexx) {
             case 0:
                 setSelected(0);
-                setSelectedBox(DressesInfo.map(renderCard));
+                setSelectedBox(Dresses.map(renderCard));
                 break;
             case 1:
                 setSelected(0);
@@ -126,7 +138,7 @@ export default function Categories(props) {
     const calculate=(index)=>{
         switch (index) {
             case 0:
-                return DressesInfo.length;
+                return Dresses.length;
                 break;
             case 1:
                 return ShoesInfo.length;
@@ -139,7 +151,7 @@ export default function Categories(props) {
         //
     };
 
-    const [selectedBox,setSelectedBox] = React.useState(DressesInfo.map(renderCard));
+    const [selectedBox,setSelectedBox] = React.useState(Dresses.map(renderCard));
 
     const [selectedItem,setSelectedItem] = React.useState(0);
 
