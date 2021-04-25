@@ -12,7 +12,6 @@ export default configureStore({
         ignoredPaths: ["items.dates"],
       },
     }),
-  
     reducer: {
       Wardrobe: WardrobeReducer,
       

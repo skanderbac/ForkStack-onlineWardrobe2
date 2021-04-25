@@ -5,19 +5,20 @@ import FileBase from "react-file-base64";
 
 function AddWardrobeLeft() {
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     const [dress, setdress] = useState({image :"" , description:""})
 
     const submit= ()=> {
-        dispatch(createwardrobe(dress))
-        console.log(dress)
-    }
+        dispatch(createwardrobe(dress));
+        console.log(dress);
+        alert("added !");
+    };
 
     return (
         <div>
 
-            <div> 
-                <input type="text" placeholder="description" onChange={(e) =>
+            <div className="form">
+                <input type="text" className="form-control" placeholder="description" onChange={(e) =>
                 setdress({ ...dress, description: e.target.value })
               }
               />
@@ -32,7 +33,7 @@ function AddWardrobeLeft() {
                 />
 
 
-                <button onClick={submit}> submit </button>
+                <button onClick={submit} className="btn"> submit </button>
              </div>
             
         </div>

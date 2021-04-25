@@ -18,7 +18,7 @@ export default function Categories(props) {
     useEffect(() => {
         dispatch(affichage())
 
-    }, [dispatch])
+    }, [dispatch]);
 
 
     const BoxColor = {
@@ -85,7 +85,7 @@ export default function Categories(props) {
                data-image="assets/images/products/single/1.jpg"
                data-zoom-image= {card.image}
                onClick={
-                   () => {setSelected(card._id);setSelectedImg(card.image); console.log(index)}
+                   () => {setSelected(index);setSelectedImg(card.image); console.log(index)}
                }
             >
                 <img
@@ -185,7 +185,7 @@ export default function Categories(props) {
 
                                                 <a href="#" id="btn-product-gallery"
                                                    className="btn-product-gallery"
-                                                    onClick={()=>deleteCloth(selected) }
+                                                    onClick={()=>deleteCloth(selectedImg) }
                                                 >
                                                     <i className="icon-close"/>
                                                 </a>
