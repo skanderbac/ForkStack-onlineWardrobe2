@@ -14,14 +14,14 @@ export default function Choises(props) {
     const [selected, setSelected] = React.useState(0);
    const finish=()=>{
        history.push('/home');
-    }
+       window.location.reload();
+
+   }
     document.body.appendChild(script);
     return(
         <div>
             <div className="login-page bg-image pt-8 pb-8 pt-md-8 pb-md-8 pt-lg-17 pb-lg-17"
-                 style={{
-                     backgroundImage:'url(https://portotheme.com/html/molla/assets/images/backgrounds/login-bg.jpg)',
-                 }}>
+                 style={{backgroundImage:'url(https://portotheme.com/html/molla/assets/images/backgrounds/login-bg.jpg)'}}>
                 <div className="container">
                     <h2 className="title">Choose your style</h2>
                     <br/>
@@ -34,15 +34,10 @@ export default function Choises(props) {
                                 >
                                     <div className="banner">
                                         <img
-                                            src={process.env.PUBLIC_URL +'assets/images/preppy.jpg'}
-                                            alt="Banner"
-                                            style={{
-                                                width: null,
-                                                height: 365,
-                                                resizeMode: 'cover'}}
-                                        />
+                                            src={process.env.PUBLIC_URL +'assets/images/demos/demo-18/banners/banner-3.jpg'}
+                                            alt="Banner"/>
                                         <div className="banner-content">
-                                            <h3 className="banner-title">Preppy Style <br/>
+                                            <h3 className="banner-title">Style 1 <br/>ultrices nulla.
                                             </h3>
                                         </div>
                                     </div>
@@ -53,15 +48,10 @@ export default function Choises(props) {
                                 >
                                     <div className="banner">
                                         <img
-                                            src={process.env.PUBLIC_URL +'assets/images/casual.jpg'}
-                                            alt="Banner"
-                                            style={{
-                                                width: null,
-                                                height: 365,
-                                                resizeMode: 'cover'}}
-                                        />
+                                            src={process.env.PUBLIC_URL +'assets/images/demos/demo-18/banners/banner-4.jpg'}
+                                            alt="Banner"/>
                                         <div className="banner-content">
-                                            <h3 className="banner-title">Casual <br/>
+                                            <h3 className="banner-title">Style 2 <br/>ultrices nulla.
                                             </h3>
                                         </div>
                                     </div>
@@ -76,15 +66,10 @@ export default function Choises(props) {
                                 >
                                     <div className="banner">
                                         <img
-                                            src={process.env.PUBLIC_URL +'assets/images/trendy.jpg'}
-                                            alt="Banner"
-                                            style={{
-                                                width: null,
-                                                height: 365,
-                                                resizeMode: 'cover'}}
-                                        />
+                                            src={process.env.PUBLIC_URL +'assets/images/demos/demo-18/banners/banner-3.jpg'}
+                                            alt="Banner"/>
                                         <div className="banner-content">
-                                            <h3 className="banner-title">Trenddy<br/>
+                                            <h3 className="banner-title">Style 3 <br/>ultrices nulla.
                                             </h3>
                                         </div>
                                     </div>
@@ -95,15 +80,10 @@ export default function Choises(props) {
                                 >
                                     <div className="banner">
                                         <img
-                                            src={process.env.PUBLIC_URL +'assets/images/classy.jpg'}
-                                            alt="Banner"
-                                            style={{
-                                                width: null,
-                                                height: 365,
-                                                resizeMode: 'cover'}}
-                                        />
+                                            src={process.env.PUBLIC_URL +'assets/images/demos/demo-18/banners/banner-3.jpg'}
+                                            alt="Banner"/>
                                         <div className="banner-content">
-                                            <h3 className="banner-title">Classy <br/>
+                                            <h3 className="banner-title">Style 4 <br/>ultrices nulla.
                                             </h3>
                                         </div>
                                     </div>
@@ -118,15 +98,10 @@ export default function Choises(props) {
                                 >
                                     <div className="banner">
                                         <img
-                                            src={process.env.PUBLIC_URL +'assets/images/bohemian.jpg'}
-                                            alt="Banner"
-                                            style={{
-                                                width: null,
-                                                height: 365,
-                                                resizeMode: 'cover'}}
-                                        />
+                                            src={process.env.PUBLIC_URL +'assets/images/demos/demo-18/banners/banner-1.jpg'}
+                                            alt="Banner"/>
                                         <div className="banner-content">
-                                            <h3 className="banner-title">Bohemian <br/>
+                                            <h3 className="banner-title">Style 5 <br/>ultrices nulla.
                                             </h3>
                                         </div>
                                     </div>
@@ -137,15 +112,10 @@ export default function Choises(props) {
                                 >
                                     <div className="banner">
                                         <img
-                                            src={process.env.PUBLIC_URL +'assets/images/scarf.jpg'}
-                                            alt="Banner"
-                                            style={{
-                                                width: null,
-                                                height: 365,
-                                                resizeMode: 'cover'}}
-                                        />
+                                            src={process.env.PUBLIC_URL +'assets/images/demos/demo-18/banners/banner-1.jpg'}
+                                            alt="Banner"/>
                                         <div className="banner-content">
-                                            <h3 className="banner-title">Scarf<br/>
+                                            <h3 className="banner-title">Style 6 <br/>ultrices nulla.
                                             </h3>
                                         </div>
                                     </div>
@@ -154,7 +124,7 @@ export default function Choises(props) {
                         </div>
                     </div>
                     <div className="form-footer">
-                        <button type="submit" className="btn btn-outline-primary-2 active" onClick={finish} >
+                        <button type="submit" className="btn btn-outline-primary-2" onClick={finish} >
                             <span>Envoyer</span>
                             <i className="icon-long-arrow-right"></i>
                         </button>

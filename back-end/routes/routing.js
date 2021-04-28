@@ -2,41 +2,56 @@ var express = require('express');
 const { route } = require('../app');
 var router = express.Router();
 var multer =require('multer');
-
-//Import controller
-var index =require( '../controllers/index');
-var controllerUser=require( '../controllers/controllerUser');
-var wardrobeController=require('../controllers/wardrobeController');
+var passport=require('passport');
 var DressesController=require('../controllers/DressesContoller');
-const storage=multer.diskStorage({
-    destination:function(req,file,cb){
-    cb(null,'./upload/');
-    },
-    filename:function(req,file,cb){
-      cb(null,file.originalname);
-    }
-        
-    
+var verify =require('../controllers/VerifyToken');
+var preferencesController=require('../controllers/preferencesController');
+var authenticate=require('../controllers/userManager/authenticate');
+var forgotPassword=require('../controllers/userManager/forgotPassword');
+var controllerUser=require( '../controllers/controllerUser');
+var productController=require('../controllers/productController');
+var sendMailer=require('../controllers/userManager/sendMailer');
+
+
+
+
+
+var storage = multer.diskStorage({   
+  destination: function(req, file, cb) { 
+     cb(null, 'uploads/');    
+  }, 
+  filename: function (req, file, cb) { 
+      const fileName = file.originalname.toLowerCase().split(' ').join('-');
+     cb(null , file.originalname);   
+  }
 });
 const upload=multer({storage:storage});
-
-
-router.get('/all',index.getAll);
-//Router for userController
-router.get('/all1',controllerUser.getAll);
-router.post('/register',controllerUser.register);
+//Routes for userController
+router.post('/register',upload.single('image'),controllerUser.register);
 router.post('/login',controllerUser.login);
-router.put('/updteUser/:id',controllerUser.Update);
-router.put('/del/:id',controllerUser.deleteUser);
+router.put('/updateUser',upload.single('image'),verify,controllerUser.Update);
 router.get('/alluser',controllerUser.getUser);
-router.delete('/deletedUser/:idd',controllerUser.deleteUser);
-//Router For wardrobecontroller
-router.get('/indexes',wardrobeController.index);
-router.post('/addwardrobe',upload.single('image'),wardrobeController.addWardrobe);
-router.post('/postwardrobe1',upload.single('image'),wardrobeController.createWardrobe);
+router.delete('/deleteUser',verify,controllerUser.deleteUser);
+router.post('/forgotPassword',forgotPassword.forgotPassword);
+//LogIn with Google
+router.post('/api/googleLogin',authenticate.googleLogin);
+router.post('/api/googleRegister',authenticate.googleRegister);
 
-router.post('/hello',index.postUser1);
+//Routes For Prefenrences
+router.post('/addPreferences',verify,preferencesController.addPreferences);
+router.put('/updatePreferences',verify,preferencesController.updatePreference);
+router.get('/userPreferences',preferencesController.getUserPreferences);
+//Routes for the Shop
+router.get('/products',productController.getProducts);
+router.get('/type',productController.getProductType);
+router.get('/shop/user',verify,productController.getUsserPref);
+router.get('/filterProduct/:type',productController.filterProduct);
+router.get('/filterProductSize/:size',productController.filterProductSize);
+router.get('/filterProductSex/:sex',productController.filterProductSex);
+router.post('/addProducts',upload.single('image'),productController.addProducts);
+router.post('/sendMail/:Email',sendMailer.sendMail);
 
+//Routes For Dresses Controller
 //router.post('/addDress',upload.single('image'),DressesController.add);
 router.post('/pic',DressesController.add);
 router.get('/allDresses',DressesController.getDresses);

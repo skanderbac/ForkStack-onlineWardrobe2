@@ -12,7 +12,7 @@ export default function Categories(props) {
     const [selected,setSelected] = React.useState(0);
     const [selectedd,setSelectedd] = React.useState(0);
     const [selectedImg,setSelectedImg] = React.useState("");
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     const  Dresses = useSelector(selectwardrobe );
 
     useEffect(() => {

@@ -29,7 +29,7 @@ DressesController.add=async(req,res)=>{
     }
 
 DressesController.delete=async(req,res)=>{
-    User.deleteOne({_id:req.params.id})
+    Dresses.deleteOne({_id:req.params.id})
         .then(function(){
             console.log("Data deleted");
         }).catch(function(error){

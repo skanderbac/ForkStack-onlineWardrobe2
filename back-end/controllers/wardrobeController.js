@@ -29,7 +29,8 @@ WardrobeController.index=async (req, res, next)=>{
     const user=await Wardrobe.findOne({user_id:req.body.user_id});
     if(user) return res.status(400).send("Wardrobe Created");
        var wardrobe=new Wardrobe(
-     {user_id:req.body.user_id,
+     {
+      user_id:req.body.user_id,
      description:req.body.description, 
      color:req.body.color,
      style:req.body.style,

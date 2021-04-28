@@ -1,11 +1,11 @@
 import {useHistory} from "react-router-dom";
-import {useFormik} from "formik";
+import {FormikProvider, useFormik,Field} from "formik";
 import React, {useState} from "react";
 import axios from "axios";
-import { queryApi } from "../utils/queryApi";
+import  queryApi  from "../utils/queryApi";
+import GoogleLogin from "react-google-login";
 
-
-
+import {number} from "yup";
 export default function Register(props){
 
     const history=useHistory();
@@ -15,37 +15,44 @@ export default function Register(props){
     const validate = values => {
         const errors = {}
 
-        if (!values.firstName) {
-            errors.firstName = 'Please Set Your First '
+        if (!values.FirstName) {
+            errors.FirstName = 'Please Set Your First Name '
         }
-        if (!values.lastName) {
-            errors.lastName = 'Please Set Your Last Name'
+        if (!values.LastName) {
+            errors.LastName = 'Please Set Your Last Name'
         }
-        if (!values.email) {
-            errors.email = 'Please Set Your email'
+        if (!values.Email) {
+            errors.Email = 'Please Set Your email'
         }
         if (!values.username) {
             errors.username = 'Please Choose username'
         }
-        if (!values.password) {
-            errors.password = 'Please Set Your Password'
-        } else if (values.password.length < 8) {
+        if (!values.Password) {
+            errors.Password = 'Please Set Your Password'
+        } else if (values.Password.length < 8) {
             errors.password = 'Must be 8 characters or more'
-        } else if (values.password === '12345678') {
-            errors.password = 'Must not be 12345678 !!!'
+        } else if (values.Password === '12345678') {
+            errors.Password = 'Must not be 12345678 !!!'
         }
         if (!values.confirmpassword) {
             errors.confirmpassword = 'Please Confirm Your Password'
-        }else if (values.confirmpassword !=values.password) {
+        }else if (values.confirmpassword !=values.Password) {
             errors.confirmpassword = 'Should Be the same as Password'
 
         }
-        if (!values.country) {
-            errors.country = 'Please Enter your country'
+        if (!values.Country) {
+            errors.Country = 'Please Enter your country'
         }
-        /*if (!values.phone) {
-            errors.phone = 'Please enter your phone number'
-        }*/
+        if (!values.Phone) {
+            errors.Phone = 'Please enter your phone number'
+        }else if (!/^[0-9]+$/i.test(values.Phone)) {
+            errors.Phone = 'Invalid email address';
+        }else if (values.Phone.length < 8) {
+            errors.Phone = 'Must be 8 characters or more'
+        }else if (values.Phone.length >8) {
+            errors.Phone = 'Must be 8 characters or more'
+        }
+
 
         return errors
     }
@@ -53,46 +60,79 @@ export default function Register(props){
     const formik = useFormik({
 
         initialValues: {
-            firstName: '',
-            lastName: '',
-            email: '',
+            FirstName: '',
+            LastName: '',
+            Email: '',
             username: '',
-            password: '',
-            country: '',
-            phone: 0,
+            Password: '',
+            Country: '',
+            Phone:null,
             confirmpassword: '',
-
         },
         validate,
         onSubmit: async(values )=> {
-            alert(JSON.stringify(values.email, null, 2));
-            const userss=axios.post('http://localhost:3000/register/',{
-                FirstName:values.firstName,
-                LastName:values.lastName,
-                Email:values.email,
+          console.log(values.Phone);
+            alert(JSON.stringify("Welcome", null, 2));
+            const [res, err] = await queryApi("register",{
+                FirstName:values.FirstName,
+                LastName:values.LastName,
+                Email:values.Email,
                 username:values.username,
-                Password:values.password,
-                Country:values.country
-            })
-                .then(response=>{//localStorage.setItem('token',response);
-                    sessionStorage.setItem("user",JSON.stringify(response.data.user));
+                Password:values.Password,
+                Country:values.Country,
+                Phone:parseInt(values.Phone),
+            }, "POST", true);
 
-                    history.push('/informations');
-                }).catch(error=>console.log(error))
+            if (err) {
+                setShowLoader(false);
+                alert("Please Change your email adresse")
+                console.log(err);
+                setError({
+                    visible: true,
+                    message: JSON.stringify(err.errors, null, 2),
+                });
+            }
+            else {
+                sessionStorage.setItem("user",res);
+                console.log(sessionStorage.getItem("user"));
+                history.push("/informations");
+                window.location.reload();
 
-            localStorage.setItem("User",userss);
-            console.log(localStorage);
 
+            }
 
         },
     });
 
 
 
-    const SignUp= () => {
 
 
-        //  return history.replace("/informations");
+    const responseSuccessGoogle = async(response) => {
+        console.log(response.tokenId);
+        const [res, err] = await queryApi("api/googleRegister", {
+            tokenId:response.tokenId
+        }, "POST", false);
+        if (err) {
+            setShowLoader(false);
+            alert("Please Change your email adresse")
+            console.log(err);
+            setError({
+                visible: true,
+                message: JSON.stringify(err.errors, null, 2),
+            });
+        }
+        else {
+            sessionStorage.setItem("user",res);
+            console.log(sessionStorage.getItem("user"));
+            history.push("/informations");
+            window.location.reload();
+
+
+        }
+    }
+
+    const responseFailureGoogle=(response)=>{
 
     }
     return(
@@ -106,28 +146,28 @@ export default function Register(props){
                             <input type="text"
                                    className="form-control"
                                    id="firstName"
-                                   name="firstName"
+                                   name="FirstName"
                                    placeholder="First Name *"
                                    onChange={formik.handleChange}
                                    onBlur={formik.handleBlur}
-                                   value={formik.values.firstName}
+                                   value={formik.values.FirstName}
                             />
-                            <p className="text-danger">  {formik.touched.firstName && formik.errors.firstName ? <div className='error'>{formik.errors.firstName}</div> : null}
-                            </p>
+                            <div className="text-danger">  {formik.touched.FirstName && formik.errors.FirstName ? <div className='error'>{formik.errors.FirstName}</div> : null}
+                            </div>
                         </div>
                         <div className="col-sm-6">
                             <label htmlFor="cname" className="sr-only">Last Name</label>
                             <input type="text"
                                    className="form-control"
                                    id="lastName"
-                                   name="lastName"
+                                   name="LastName"
                                    placeholder="Last Name *"
                                    onChange={formik.handleChange}
                                    onBlur={formik.handleBlur}
-                                   value={formik.values.lastName}
+                                   value={formik.values.LastName}
                             />
-                            <p className="text-danger">  {formik.touched.lastName && formik.errors.lastName ? <div className='error'>{formik.errors.lastName}</div> : null}
-                            </p>
+                            <div className="text-danger">  {formik.touched.LastName && formik.errors.LastName ? <div className='error'>{formik.errors.LastName}</div> : null}
+                            </div>
                         </div>
                     </div>
                     <div className="row">
@@ -136,14 +176,14 @@ export default function Register(props){
                             <input type="email"
                                    className="form-control"
                                    id="email"
-                                   name="email"
+                                   name="Email"
                                    placeholder="Email*"
                                    onChange={formik.handleChange}
                                    onBlur={formik.handleBlur}
-                                   value={formik.values.email}
+                                   value={formik.values.Email}
                             />
-                            <p className="text-danger"> {formik.touched.email && formik.errors.email ? <div className='error'>{formik.errors.email}</div> : null}
-                            </p>
+                            <div className="text-danger"> {formik.touched.Email && formik.errors.Email ? <div className='error'>{formik.errors.Email}</div> : null}
+                            </div>
                         </div>
                         <div className="col-sm-6">
                             <label htmlFor="cname" className="sr-only">Username</label>
@@ -154,8 +194,8 @@ export default function Register(props){
                                    onChange={formik.handleChange}
                                    onBlur={formik.handleBlur}
                                    value={formik.values.username}/>
-                            <p className="text-danger">  {formik.touched.username && formik.errors.username ? <div className='error'>{formik.errors.username}</div> : null}
-                            </p>
+                            <div className="text-danger">  {formik.touched.username && formik.errors.username ? <div className='error'>{formik.errors.username}</div> : null}
+                            </div>
                         </div>
                     </div>
                     <div className="row">
@@ -163,14 +203,14 @@ export default function Register(props){
                             <label htmlFor="cpasssword" className="sr-only">Password</label>
                             <input type="password" className="form-control"
                                    id="password"
-                                   name="password"
+                                   name="Password"
                                    placeholder="Password *"
                                    required
                                    onChange={formik.handleChange}
                                    onBlur={formik.handleBlur}
-                                   value={formik.values.password}/>
-                            <p className="text-danger"> {formik.touched.password && formik.errors.password ? <div className='error'>{formik.errors.password}</div> : null}
-                            </p>
+                                   value={formik.values.Password}/>
+                            <div className="text-danger"> {formik.touched.Password && formik.errors.Password ? <div className='error'>{formik.errors.Password}</div> : null}
+                            </div>
                         </div>
                         <div className="col-sm-6">
                             <label htmlFor="cpassword" className="sr-only">Confirm Password</label>
@@ -184,8 +224,8 @@ export default function Register(props){
                                    value={formik.values.confirmpassword
                                    }
                             />
-                            <p className="text-danger">  {formik.touched.confirmpassword && formik.errors.confirmpassword ? <div className='error'>{formik.errors.confirmpassword}</div> : null}
-                            </p>
+                            <div className="text-danger">  {formik.touched.confirmpassword && formik.errors.confirmpassword ? <div className='error'>{formik.errors.confirmpassword}</div> : null}
+                            </div>
                         </div>
                     </div>
 
@@ -196,35 +236,40 @@ export default function Register(props){
                             <input type="text"
                                    className="form-control"
                                    id="country"
-                                   name="country"
+                                   name="Country"
                                    placeholder="Country*"
                                    onChange={formik.handleChange}
                                    onBlur={formik.handleBlur}
-                                   value={formik.values.country}
+                                   value={formik.values.Country}
 
                             />
-                            <p className="text-danger">  {formik.touched.country && formik.errors.country ? <div className='error'>{formik.errors.country}</div> : null}
-                            </p>
+                            <div className="text-danger">  {formik.touched.Country && formik.errors.Country ? <div className='error'>{formik.errors.Country}</div> : null}
+                            </div>
                         </div>
+
                         <div className="col-sm-6">
-                            <label htmlFor="cname" className="sr-only">Country</label>
-                            <input type="number"
-                                   className="form-control"
-                                   id="phone"
-                                   name="phone"
-                                   placeholder="Phone*"
-                                   onChange={formik.handleChange}
-                                   onBlur={formik.handleBlur}
-                                   value={formik.values.phone}
+                            <FormikProvider value={formik}>
 
-                            />
-                            <p className="text-danger">  {formik.touched.phone && formik.errors.phone ? <div className='error'>{formik.errors.phone}</div> : null}
-                            </p>
+                                <input type="text"
+                                       className="form-control"
+                                       id="Phone"
+                                       name="Phone"
+                                       onChange={formik.handleChange}
+                                       onBlur={formik.handleBlur}
+                                       value={formik.values.Phone}/>
+                                <div className="text-danger">{formik.touched.Phone && formik.errors.Phone ?
+                                    <div className='error'>{formik.errors.Phone}</div> : null}
+                                </div>
+                            </FormikProvider>
+
                         </div>
+
 
                     </div>
+
+
                     <div className="form-footer">
-                        <button type="submit" className="btn btn-outline-primary-2" disabled={!(formik.isValid && formik.dirty)} onClick={SignUp}>
+                        <button type="submit" className="btn btn-outline-primary-2" disabled={!(formik.isValid && formik.dirty)}>
                             <span>Sign Up</span>
                             <i className="icon-long-arrow-right"></i>
                         </button>
@@ -241,13 +286,16 @@ export default function Register(props){
                 </form>
 
                 <div className="form-choice">
-                    <p className="text-center">or sign in with</p>
+                    <p className="text-center">or sign up with</p>
                     <div className="row">
                         <div className="col-sm-6">
-                            <a href="#" className="btn btn-login btn-g">
-                                <i className="icon-google"></i>
-                                Login With Google
-                            </a>
+                            <GoogleLogin
+                                clientId="224688907368-fpdv128j9kb8e78c3qaal8nso19u2v69.apps.googleusercontent.com"
+                                onSuccess={responseSuccessGoogle}
+                                onFailure={responseFailureGoogle}
+                                cookiePolicy={'single_host_origin'}
+                                value={'Signup'}
+                            />
                         </div>
                         <div className="col-sm-6">
                             <a href="#" className="btn btn-login  btn-f">

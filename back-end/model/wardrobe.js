@@ -3,7 +3,7 @@ var Schema =mongoose.Schema;
 var Wardrobe=new Schema({
     user_id:{
         type:mongoose.Schema.Types.ObjectId,ref:'user1',
-        
+    
     },
     style:{
         type:String,

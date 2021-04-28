@@ -16,7 +16,12 @@ export default ({ onChange, options, value, className }) => {
                 onChange={value => {
                     onChange(value)
 
-                }} options={options} />
+                }}
+                options={options}
+                required={true}
+                noOptionsMessage={() => "No values available"}            />
+                <p></p>
+
 </div>
 
     )

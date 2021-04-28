@@ -4,13 +4,8 @@ var User=require('../model/user')
 var joi=require('@hapi/joi');
 const { valid } = require('@hapi/joi');
 const Joi = require('@hapi/joi');
-const { JSONCookie } = require('cookie-parser');
 var index={}
-/* GET home page. */
-index.getAll=
-async (req, res, next)=>{
-  res.render('index', { title: 'Express' });
-};
+
 index.postUser=async(req,res)=>{
   var user=new User(
       {FirstName:"Samar",LastName:"Romdhani",Country:"Tunisia",Email:"samar.romdhani1@esprit.tn",

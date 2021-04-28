@@ -2,12 +2,17 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 const dotenv=require('dotenv');
-var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var gloabalRouter= require('./routes/routing');
+var routes= require('./routes/routing');
+var serveStatic = require('serve-static')
 const cors = require('cors');
 var config =require('./database/mongodb.json');
 var mongoose =require('mongoose');
+var passport=require('passport');
+var bodyParser = require('body-parser')
+var cookieparser=require('cookie-parser');
+var multer =require('multer');
+var productController=require('./controllers/productController');
 const WardrobeRouting = require('./routes/WardrobeRouting')
 dotenv.config();
 var app = express();
@@ -19,27 +24,27 @@ mongoose.connect(config.mongo.uri,
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ limit: "50mb", extended: true }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.urlencoded({ extended: false }));
+app.get('/uploads/:name',function(req, res){
+  res.sendFile(__dirname+'/uploads/'+req.params.name);
+});
+app.use(routes);
 app.use("/robe",WardrobeRouting)
 
-app.use("/test", gloabalRouter);
 
-// app.use('/wardrobe',wardrrobeRouter);
-// app.use('/', indexRouter);
-// app.use('/users', usersRouter);
-
+app.use(passport.initialize());
+app.use(passport.session());
+app.get('/google',passport.authenticate('google',{scope:['profile','email']}));
+app.get('/google/callback',passport.authenticate('google',{failureRedirect:'/login'}),(req,res)=>{
+  res.header('Authorization',"samar").send();
+});
 // catch 404 and forward to error handler
-
-
-
 app.use(function(req, res, next) {
   next(createError(404));
 });
+
 
 // error handler
 app.use(function(err, req, res, next) {
@@ -51,5 +56,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
 
 module.exports = app;

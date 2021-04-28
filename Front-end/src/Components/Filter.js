@@ -1,110 +1,104 @@
-import {useHistory} from "react-router-dom";
+import {useHistory,Link} from "react-router-dom";
+import {useSelector} from "react-redux";
+import {fetchProducts, selectProducts} from "../Redux/slices/ProductSlice";
+import React, {useEffect} from "react";
 
 export default function Filter(props){
     const history=useHistory();
-    return(
-<aside className="col-lg-3 order-lg-first">
+    const products=useSelector(selectProducts);
 
-    <div className="sidebar sidebar-shop" style={{width:'400px',height:'600px'}}>
+    return(
+<aside className="col-lg-3 order-lg-first" style={{width:"300px"}}>
+
+    <div className="sidebar sidebar-shop" style={{width:'300px',height:'600px'}}>
         <div className="widget widget-clean">
             <label>Filters:</label>
-            <a href="#" className="sidebar-filter-clear">Clean All</a>
         </div>
 
         <div className="widget widget-collapsible">
             <h3 className="widget-title">
                 <a data-toggle="collapse" href="#widget-1" role="button"
                    aria-expanded="true" aria-controls="widget-1">
-                    Category
+                    Type
                 </a>
             </h3>
 
             <div className="collapse show" id="widget-1">
                 <div className="widget-body">
                     <div className="filter-items filter-items-count">
-                        <div className="filter-item">
-                            <div className="custom-control custom-checkbox">
-                                <a onClick={()=>history.replace("/categories")}><label>Dresses</label></a>
+                        {products?.map((product, index) => (
 
-                            </div>
-                            <span className="item-count">4</span>
-                        </div>
+                            <div className="filter-item">
+                                <div className="custom-control custom-checkbox" style={{textTransform:'uppercase'}}>
 
-                        <div className="filter-item">
-                            <div className="custom-control custom-checkbox">
-                                <a onClick={()=>history.replace("/categories")}><label>T-Shirts</label></a>
+                                    <Link
+                                        to={{
+                                            pathname: '/type'+"/"+product._id,
+                                            state: { type: product._id }
+                                        }}
+                                    onClick={() => window.location.href="/type/"+product._id}>{product._id}
+                                    </Link>
 
-                            </div>
-                            <span className="item-count">0</span>
-                        </div>
+                                </div>
 
-
-                        <div className="filter-item">
-                            <div className="custom-control custom-checkbox">
-                                <a onClick={()=>history.replace("/categories")}><label>Bags</label></a>
-
-                            </div>
-                            <span className="item-count">4</span>
-                        </div>
-
-                        <div className="filter-item">
-                            <div className="custom-control custom-checkbox">
-                                <a onClick={()=>history.replace("/categories")}><label>Jackts</label></a>
-
-                            </div>
-                            <span className="item-count">4</span>
-                        </div>
-
-                        <div className="filter-item">
-                            <div className="custom-control custom-checkbox">
-                                <a onClick={()=>history.replace("/categories")}><label>Jeans</label></a>
-                            </div>
-                            <span className="item-count">3</span>
-                        </div>
-
-
-                        <div className="filter-item">
-                            <div className="custom-control custom-checkbox">
-                                <a onClick={()=>history.replace("/categories")}><label>Shoes</label></a>
-
-                            </div>
-                            <span className="item-count">1</span>
-                        </div>
+                                <span className="item-count">{product.Number}</span>
 
                     </div>
+                        ))}
                 </div>
             </div>
         </div>
 
+
+
+
         <div className="widget widget-collapsible">
             <h3 className="widget-title">
+
                 <a data-toggle="collapse" href="#widget-2" role="button"
-                   aria-expanded="true" aria-controls="widget-2">
-                    Size
-                </a>
+                    aria-expanded="true" aria-controls="widget-2">
+                Sex
+            </a>
             </h3>
 
             <div className="collapse show" id="widget-2">
                 <div className="widget-body">
-                    <div className="filter-items">
+                    <div className="filter-items filter-items-count">
                         <div className="filter-item">
-                            <select name="sortby" id="sortby"
-                                    className="form-control">
-                                <option value="popularity"
-                                        selected="selected"> Select Size
-                                </option>
-                                <option value="rating">S</option>
-                                <option value="date">M</option>
-                                <option value="date">L</option>
-                                <option value="date">XL</option>
-                                <option value="date">XXL</option>
+                            <div className="custom-control custom-checkbox">
 
-                            </select>
+                                <Link
+                                    to={{
+                                        pathname: '/sex/men',
+                                        state:{sex:"men" }
+                                    }}
+                                    onClick={() => window.location.href="/sex/men"}>MEN
+                                </Link>
+
+                            </div>
+
+
                         </div>
+                        <div className="filter-item">
+                            <div className="custom-control custom-checkbox">
+
+                                <Link
+                                    to={{
+                                        pathname: '/sex/women',
+                                        state: {sex:"women"}
+                                    }}
+                                    onClick={() => window.location.href="/sex/women"}>Women
+                                </Link>
+
+                            </div>
+
+
+                        </div>
+
                     </div>
                 </div>
             </div>
-        </div>
+
 
         <div className="widget widget-collapsible">
             <h3 className="widget-title">
@@ -140,6 +134,8 @@ export default function Filter(props){
         </div>
 
 
+    </div>
+    </div>
     </div>
 </aside>
     )

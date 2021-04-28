@@ -4,6 +4,9 @@ var User=new Schema({
     Phone:{
         type:Number,
     },
+    image:{
+        type:String,
+    },
     FirstName: {
         type:String,
         required:true,
@@ -16,7 +19,6 @@ var User=new Schema({
     },
     Password:{
         type:String,
-        required:true,
         
     },
     Country: String,
@@ -25,7 +27,6 @@ var User=new Schema({
         required:true,
         
     },
-    
     username:{
         type:String,
         required:true,
@@ -37,9 +38,22 @@ var User=new Schema({
     sex:{
         type:String,
     },
-    Age:{
+    BirthDate:{
+        type:Date,
+    },
+    height:{
         type:Number,
     },
+    weight:{
+        type:Number,
+    },
+    status:{
+        type:String,
+    },
+    date_of_creation:{
+        type:Date,
+    },
+
     
 });
-module.exports =mongoose.model('user1',User);
+module.exports =mongoose.model('user',User);

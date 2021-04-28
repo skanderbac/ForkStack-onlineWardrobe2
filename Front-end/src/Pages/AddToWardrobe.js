@@ -19,6 +19,7 @@ export default function AddToWardrobe(props){
                 </div>
             </div>
 
+            <AddWardrobeRight></AddWardrobeRight>
         </div>
             </>
     )

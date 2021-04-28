@@ -1,52 +1,15 @@
 import { BrowserRouter as Router, Route,Link,useHistory } from 'react-router-dom';
+import Filter from "../Components/Filter";
+import Products from "../Components/Products";
 import SubHeader from "../Components/SubHeaser";
 import React from "react";
 import AddToWardrobe from "./AddToWardrobe";
-import  useState from "react";
-import Modal from 'react-modal';
-import {ModalContent} from "react-st-modal";
-
 
 export default function All(props){
     const history=useHistory();
 
-
-    var subtitle;
-    const [modalIsOpen,setIsOpen] = React.useState(false);
-    function openModal() {
-        setIsOpen(true);
-    }
-
-    function afterOpenModal() {
-
-    }
-
-    function closeModal(){
-        setIsOpen(false);
-    }
-
-
     return (
 <>
-
-    <button onClick={openModal}>Open Modal</button>
-
-
-    <Modal
-        isOpen={modalIsOpen}
-        onAfterOpen={afterOpenModal}
-        onRequestClose={closeModal}
-        style={{
-            top: '35%',
-            left: '50%',
-        }}
-    >
-        <h2 ref={_subtitle => (subtitle = _subtitle)}></h2>
-        <button onClick={closeModal}>close</button>
-        <div>Add your clothes</div>
-        <AddToWardrobe></AddToWardrobe>
-    </Modal>
-
     <SubHeader pagename={"My Fitting Room"}></SubHeader>
     <nav aria-label="breadcrumb" className="breadcrumb-nav border-0 mb-0">
         <div className="container d-flex align-items-center"><ol className="breadcrumb">
@@ -249,9 +212,7 @@ export default function All(props){
 
             </aside>
         </div>
-
+        <AddToWardrobe></AddToWardrobe>
     </div>
-
-
     </>)
 }

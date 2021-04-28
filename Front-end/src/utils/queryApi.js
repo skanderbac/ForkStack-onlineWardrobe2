@@ -1,12 +1,13 @@
 import api from "./api";
-
 /**
  * @param {String} endpoint relative endpoint
  * @param {object} body request body
- * @param {String} method method can be ["GET","POST","PUT", "DELETE"] | Default GET
- * @param {boolean} transformBody whether to transform the request body from JSON to FormData | Default false
+ * @param {String} method method can be ["GET","POST","PUT", "DELETE"] | Default
+ GET
+ * @param {boolean} transformBody whether to transform the request body from JSON
+ to FormData | Default false
  */
-export async function queryApi(
+export default async function queryApi(
     endpoint,
     body = null,
     method = "GET",
@@ -15,24 +16,25 @@ export async function queryApi(
  let error = null;
  let result = null;
  try {
-  //Create our config, with the method as the method passed and the new endpoint
+//Create our config, with the method as the method passed and the new endpoin
+  // t
   let config = {
    method,
    url: `${process.env.REACT_APP_API_URL}/${endpoint}`,
   };
   if (body) {
-   // If we have a body and the method is GET, the config is the following
+// If we have a body and the method is GET, the config is the following
    if (method.toUpperCase() === "GET")
     config = {
      ...config,
      headers: { "Content-Type": "application/json" },
      data: body,
     };
-
    if (["POST", "PUT", "PATCH"].includes(method.toUpperCase())) {
     if (transformBody) {
-     // If our method is POST, PUT or PATCH, and we have to transform our body to Form Data (for files upload for example)
-     // transform body object to form data entries
+// If our method is POST, PUT or PATCH, and we have to transform our bo
+     //dy to Form Data (for files upload for example)
+// transform body object to form data entries
      let bodyFormData = new FormData();
      for (let [key, value] of Object.entries(body)) {
       if (value) {
@@ -41,14 +43,15 @@ export async function queryApi(
        else bodyFormData.append(key, value);
       }
      }
-     // Change the config to the following
+// Change the config to the following
      config = {
       ...config,
       headers: { "Content-Type": "multipart/form-data" },
       data: bodyFormData,
      };
     } else {
-     // If not keep the content type json and the body will be parsed automatically to json
+// If not keep the content type json and the body will be parsed automa
+     // tically to json
      config = {
       ...config,
       headers: { "Content-Type": "application/json" },
@@ -57,35 +60,34 @@ export async function queryApi(
     }
    }
   }
-
-  // Setting authorization token if available with each request
-  // This example uses localStorage, feel free to change it to cookie storage or something else.
-
-  // const token = localStorage.getItem("token");
-  // if (token)
-  //   config.headers = { ...config.headers, Authorization: `Bearer ${token}` };
-
-  // console.log(`Requesting : ${config.url}`)
-  // console.log(config)
-
+// Setting authorization token if available with each request
+// This example uses localStorage, feel free to change it to cookie storage o
+  //r something else.
+ const token = sessionStorage.getItem("user");
+// if (token)
+ config.headers = { ...config.headers, Authorization:`${token}` }
+  ;
+ console.log(`Requesting : ${config.url}`)
+console.log(config.headers);
   const res = await api(config);
   result = res.data;
  } catch (e) {
-  // To differentiate between validation errors and response errors,
-  // check whether the "errors" key is defined or not in the returned error from this function.
-
+// To differentiate between validation errors and response errors,
+// check whether the "errors" key is defined or not in the returned error fro
+  //m this function.
   if (e.response) {
-   // The request was made and the server responded with a status code that falls out of the range of 2xx
+// The request was made and the server responded with a status code that fa
+   //lls out of the range of 2xx
    error = e.response.data;
-   //   console.log(e.message);
-   //   console.log(error);
+// console.log(e.message);
+// console.log(error);
   } else {
-   // 1) The request was made but no response was received
-   // OR
-   // 2) Something went wrong in setting up the request that triggered an Error
-
-   //   console.log(e.request);
-   //   console.log(e.message);
+// 1) The request was made but no response was received
+// OR
+// 2) Something went wrong in setting up the request that triggered an Erro
+   // r
+// console.log(e.request);
+// console.log(e.message);
    error = e.message;
   }
  }
