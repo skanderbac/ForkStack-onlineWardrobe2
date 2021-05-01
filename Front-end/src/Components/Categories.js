@@ -12,32 +12,18 @@ import Filter from "./Filter";
 
 export default function Categories(props) {
     const prod=useSelector(selectProducts);
+    const user1=sessionStorage.getItem('user');
 
     const history=useHistory();
     return(
         <div>
             <main className="main">
                 <nav aria-label="breadcrumb" className="breadcrumb-nav border-0 mb-0">
-                    <div className="container d-flex align-items-center"><ol className="breadcrumb">
-                        <li className="breadcrumb-item"><a
-                            href="https://portotheme.com/html/molla/index.html">Home</a></li>
-                        <li className="breadcrumb-item"><a href="#">Products</a></li>
-                        <li className="breadcrumb-item active" aria-current="page">Default</li>
-                    </ol>
+                    <div className="container d-flex align-items-center">
+                       
 
-                        <nav className="product-pager ml-auto" aria-label="Product">
-                            <a className="product-pager-link product-pager-prev" href="#" aria-label="Previous"
-                               tabIndex="-1">
-                                <i className="icon-angle-left"></i>
-                                <span>Prev</span>
-                            </a>
-
-                            <a className="product-pager-link product-pager-next" href="#" aria-label="Next"
-                               tabIndex="-1">
-                                <span>Next</span>
-                                <i className="icon-angle-right"></i>
-                            </a>
-                        </nav>
+                          
+                            
                     </div>
                 </nav>
 
@@ -53,6 +39,7 @@ export default function Categories(props) {
                                     <div className="toolbox">
                                         <div className="toolbox-left">
                                             <div className="toolbox-info">
+                                            {user1 ?(
                                                 <Link
                                                     to={{
                                                         pathname: '/recommandations'
@@ -60,18 +47,12 @@ export default function Categories(props) {
                                                     onClick={() => window.location.href="/recommandations"}>
                                         Recommandations
                                                 </Link>
+                                                ):(<h1></h1>)}
                                             </div>
                                         </div>
                                         <div className="toolbox-right">
                                             <div className="toolbox-sort">
-                                                <label htmlFor="sortby">Sort by:</label>
-                                                <div className="select-custom">
-                                                    <select name="sortby" id="sortby" className="form-control">
-                                                        <option value="popularity" selected="selected">Most Popular</option>
-                                                        <option value="rating">Most Rated</option>
-                                                        <option value="date">Date</option>
-                                                    </select>
-                                                </div>
+                                                
                                             </div>
                                         </div>
                                     </div>

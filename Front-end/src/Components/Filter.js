@@ -2,11 +2,13 @@ import {useHistory,Link} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {fetchProducts, selectProducts} from "../Redux/slices/ProductSlice";
 import React, {useEffect} from "react";
+import useApi from "../Hooks/useApi";
 
 export default function Filter(props){
     const history=useHistory();
     const products=useSelector(selectProducts);
-
+    const [styles, err, reload] = useApi("style");
+   console.log(styles);
     return(
 <aside className="col-lg-3 order-lg-first" style={{width:"300px"}}>
 
@@ -104,30 +106,31 @@ export default function Filter(props){
             <h3 className="widget-title">
                 <a data-toggle="collapse" href="#widget-3" role="button"
                    aria-expanded="true" aria-controls="widget-3">
-                    Colour
+                    Style
                 </a>
             </h3>
 
             <div className="collapse show" id="widget-3">
                 <div className="widget-body">
-                    <div className="filter-colors">
-                        <a href="#" style={{background: '#b87145'}}><span
-                            className="sr-only">Color Name</span></a>
-                        <a href="#" style={{background:'#f0c04a'}}><span
-                            className="sr-only">Color Name</span></a>
-                        <a href="#" style={{background:'#333333'}}><span
-                            className="sr-only">Color Name</span></a>
-                        <a href="#" className="selected"
-                           style={{background:'#cc3333'}}><span
-                            className="sr-only">Color Name</span></a>
-                        <a href="#" style={{background:'#3399cc'}}><span
-                            className="sr-only">Color Name</span></a>
-                        <a href="#" style={{background:'#669933'}}><span
-                            className="sr-only">Color Name</span></a>
-                        <a href="#" style={{background:'#f2719c'}}><span
-                            className="sr-only">Color Name</span></a>
-                        <a href="#" style={{background:'#ebebeb'}}><span
-                            className="sr-only">Color Name</span></a>
+                       
+                    <div className="filter-items filter-items-count">
+                        {styles?.map((style, index) => (
+
+                            <div className="filter-item">
+                                <div className="custom-control custom-checkbox" style={{textTransform:'uppercase'}}>
+
+                                <Link
+                                        to={{
+                                            pathname: '/style'+"/"+style._id,
+                                            state: { style: style._id }
+                                        }}
+                                    onClick={() => window.location.href="/style/"+style._id}>{style._id}
+                                    </Link>
+                                </div>
+
+
+                    </div>
+                        ))}
                     </div>
                 </div>
             </div>

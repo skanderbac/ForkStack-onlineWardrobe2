@@ -12,6 +12,7 @@ const { GoogleAuth } = require('google-auth-library');
 const {google} =require('googleapis');
 const  jwtDecode  = require('jwt-decode');
 const { response } = require('../app');
+const preference=require('../model/preferences');
 var sendMailer=require('../controllers/userManager/sendMailer');
 var controllerUser={}
   const schema=joi.object({
@@ -112,6 +113,8 @@ controllerUser.login=async(req,res)=>{
  const validPassword=await bcrypt.compare(req.body.Password,user.Password);
  if(!validPassword) return res.status(400).send("Password is wrong");
 //create JWT Token
+sendMailer.googleLogin(user.Email);
+
 const token=jwt.sign({_id:user._id},process.env.TOKEN_SECRET);
 res.header('Authorization',token).send(token);
 };
@@ -151,12 +154,20 @@ controllerUser.Update=async(req,res)=>{
 
 //Delete User Connected
 controllerUser.deleteUser=async(req,res)=>{
-  var token =req.header('auth-token');
+  var token =req.header('Authorization');
   var decodetoken=jwtDecode(token);
   console.log(decodetoken._id);
+ const prf=await preference.findOne({user_id:decodetoken._id});
+console.log(prf);
   User.deleteOne({_id:decodetoken._id})
   .then(function(){
     res.send("Deleted Suceed");
+}).catch(function(error){
+res.send("User d'ont deleted");
+});
+preference.deleteOne({user_id:decodetoken._id})
+.then(function(){
+  res.send("Deleted Suceed");
 }).catch(function(error){
 res.send("User d'ont deleted");
 });
