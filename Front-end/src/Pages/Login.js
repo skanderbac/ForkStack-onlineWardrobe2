@@ -1,11 +1,12 @@
 import React, {Suspense, useState} from "react";
 import Register from "./Register";
-import {useHistory} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import {useContext} from "react";
 import GoogleLogin from 'react-google-login';
-
+import FacebookLogin from 'react-facebook-login';
 import {UserContext} from "../contexts/UserContext";
-
+import {store,ReactNotification}from "react-notifications-component";
+import 'react-notifications-component/dist/theme.css';
 import {useFormik, yupToFormErrors} from "formik";
 import Cookies from "js-cookie";
 import * as Yup from "yup";
@@ -28,8 +29,21 @@ export default function Login(props) {
             tokenId:response.tokenId
         },"POST", false);
         if (err) {
+            store.addNotification({
+                title: "Welcome!",
+                message: "Please sign Up",
+                type: "danger",
+                insert: "top",
+                container: "top-right",
+                animationIn: ["animate__animated", "animate__fadeIn"],
+                animationOut: ["animate__animated", "animate__fadeOut"],
+                dismiss: {
+                    duration: 5000,
+                    onScreen: true
+                }
+            });
+
             setShowLoader(false);
-            alert("Please signup")
             console.log(err);
             setError({
                 visible: true,
@@ -37,12 +51,27 @@ export default function Login(props) {
             });
         }
         else {
+
+
             sessionStorage.setItem("user",res);
             console.log(sessionStorage.getItem("user"));
             history.push("/home");
             window.location.reload();
 
-
+            console.log(res);
+            store.addNotification({
+                title: "Welcome!",
+                message: "Welcome",
+                type: "success",
+                insert: "top",
+                container: "top-right",
+                animationIn: ["animate__animated", "animate__fadeIn"],
+                animationOut: ["animate__animated", "animate__fadeOut"],
+                dismiss: {
+                    duration: 5000,
+                    onScreen: true
+                }
+            });
         }
     }
     const responseFailureGoogle=(response)=>{
@@ -71,6 +100,56 @@ export default function Login(props) {
         return errors
     }
 
+    const responseFacebook1=async(response)=>{
+        console.log(response.email);
+                const [res, err] = await queryApi("api/facebookLogin",{
+                    Email:response.email
+                },"POST", false);
+                if (err) {
+                    setShowLoader(false);
+                    console.log(err);
+                    store.addNotification({
+                        title: "Welcome!",
+                        message: "Please Create account with this account",
+                        type: "danger",
+                        insert: "top",
+                        container: "top-right",
+                        animationIn: ["animate__animated", "animate__fadeIn"],
+                        animationOut: ["animate__animated", "animate__fadeOut"],
+                        dismiss: {
+                            duration: 5000,
+                            onScreen: true
+                        }
+                    });
+        
+                    setError({
+                        visible: true,
+                        message: JSON.stringify(err.errors, null, 2),
+                    });
+                } else {
+                    store.addNotification({
+                        title: "Welcome!",
+                        message: " ",
+                        type: "success",
+                        insert: "top",
+                        container: "top-right",
+                        animationIn: ["animate__animated", "animate__fadeIn"],
+                        animationOut: ["animate__animated", "animate__fadeOut"],
+                        dismiss: {
+                            duration: 5000,
+                            onScreen: true
+                        }
+                    });
+        
+                    sessionStorage.setItem("user",res);
+                    console.log(sessionStorage.getItem("user"));
+                    history.push("/home");
+                    window.location.reload();
+        
+        
+                }
+        
+           }
     const formik = useFormik({
 
         initialValues: {
@@ -93,8 +172,35 @@ export default function Login(props) {
                     visible: true,
                     message: JSON.stringify(err.errors, null, 2),
                 });
+                store.addNotification({
+                    title: "Welcome!",
+                    message: "Please sign Up",
+                    type: "danger",
+                    insert: "top",
+                    container: "top-right",
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: ["animate__animated", "animate__fadeOut"],
+                    dismiss: {
+                        duration: 5000,
+                        onScreen: true
+                    }
+                });
             }
             else {
+                store.addNotification({
+                    title: "Welcome!",
+                    message: "welcome",
+                    type: "success",
+                    insert: "top",
+                    container: "top-right",
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: ["animate__animated", "animate__fadeOut"],
+                    dismiss: {
+                        duration: 5000,
+                        onScreen: true
+                    }
+                });
+
                 sessionStorage.setItem("user",res);
                 console.log(sessionStorage.getItem("user"));
                 history.push("/home");
@@ -133,18 +239,18 @@ export default function Login(props) {
                                 <form onSubmit={formik.handleSubmit}>
                                     <div className="form-group">
 
-                                        <label htmlFor="singin-email-2">Username or email address *</label>
+                                        <label htmlFor="singin-email-2"><strong>Email address </strong></label>
                                         <input
                                             className="form-control"
                                             id="email"
                                             name="email"
-                                            type="email"
+                                            type="text"
                                             onChange={formik.handleChange}
                                             onBlur={formik.handleBlur}
                                             value={formik.values.email}/>
                                     </div>
                                     <div className="form-group">
-                                        <label htmlFor="singin-password-2">Password *</label>
+                                        <label htmlFor="singin-password-2"><strong>Password </strong></label>
                                         <input
                                             className="form-control"
                                             id="password"
@@ -169,7 +275,10 @@ export default function Login(props) {
                                                 Me</label>
                                         </div>
 
-                                        <a href="#" className="forgot-link">Forgot Your Password?</a>
+                                        <a href="/forgotPassword" className="forgot-link"
+                                           onClick={() =>  history.push("/forgotPassword")
+                                           }>
+                                            Forgot Your Password?</a>
                                     </div>
                                 </form>
                                 <div className="form-choice">
@@ -181,13 +290,14 @@ export default function Login(props) {
                                                 onSuccess={responseSuccessGoogle}
                                                 onFailure={responseFailureGoogle}
                                                 cookiePolicy={'single_host_origin'}
-                                            />,
+                                            />
                                         </div>
-                                        <div className="col-sm-6">
-                                            <a href="#" className="btn btn-login btn-f">
-                                                <i className="icon-facebook-f"></i>
-                                                Login With Facebook
-                                            </a>
+                                        <div className="col-sm-6" style={{width:"50px"}}>
+                                        <FacebookLogin
+                                                appId="218233472998386"
+                                                autoLoad={false}
+                                                fields="name,email,picture"
+                                                callback={responseFacebook1} />
                                         </div>
                                     </div>
                                 </div>

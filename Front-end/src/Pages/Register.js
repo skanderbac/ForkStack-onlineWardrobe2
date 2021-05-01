@@ -4,8 +4,8 @@ import React, {useState} from "react";
 import axios from "axios";
 import  queryApi  from "../utils/queryApi";
 import GoogleLogin from "react-google-login";
-
-import {number} from "yup";
+import {store,ReactNotification}from "react-notifications-component";
+import FacebookLogin from "react-facebook-login";
 export default function Register(props){
 
     const history=useHistory();
@@ -16,7 +16,7 @@ export default function Register(props){
         const errors = {}
 
         if (!values.FirstName) {
-            errors.FirstName = 'Please Set Your First Name '
+            errors.FirstName = 'Please Set Your First '
         }
         if (!values.LastName) {
             errors.LastName = 'Please Set Your Last Name'
@@ -30,7 +30,7 @@ export default function Register(props){
         if (!values.Password) {
             errors.Password = 'Please Set Your Password'
         } else if (values.Password.length < 8) {
-            errors.password = 'Must be 8 characters or more'
+            errors.Password = 'Must be 8 characters or more'
         } else if (values.Password === '12345678') {
             errors.Password = 'Must not be 12345678 !!!'
         }
@@ -71,8 +71,6 @@ export default function Register(props){
         },
         validate,
         onSubmit: async(values )=> {
-          console.log(values.Phone);
-            alert(JSON.stringify("Welcome", null, 2));
             const [res, err] = await queryApi("register",{
                 FirstName:values.FirstName,
                 LastName:values.LastName,
@@ -94,6 +92,19 @@ export default function Register(props){
             }
             else {
                 sessionStorage.setItem("user",res);
+                store.addNotification({
+                    title: "Welcome!",
+                    message: "Your Count is created",
+                    type: "success",
+                    insert: "top",
+                    container: "top-right",
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: ["animate__animated", "animate__fadeOut"],
+                    dismiss: {
+                        duration: 5000,
+                        onScreen: true
+                    }
+                });
                 console.log(sessionStorage.getItem("user"));
                 history.push("/informations");
                 window.location.reload();
@@ -105,6 +116,60 @@ export default function Register(props){
     });
 
 
+    const responseFacebook=async(response)=>{
+        console.log(response);
+        const name=response.name.split(' ');
+        const [res, err] = await queryApi("api/facebookRegister",{
+            Email:response.email,
+            FirstName:name[0],
+            LastName:name[1],
+            username:response.name,
+        },"POST", false);
+        if (err) {
+            setShowLoader(false);
+            console.log(err);
+            store.addNotification({
+                title: "Sorry!",
+                message: "You can logged In with this account",
+                type: "danger",
+                insert: "top",
+                container: "top-right",
+                animationIn: ["animate__animated", "animate__fadeIn"],
+                animationOut: ["animate__animated", "animate__fadeOut"],
+                dismiss: {
+                    duration: 5000,
+                    onScreen: true
+                }
+            });
+
+            setError({
+                visible: true,
+                message: JSON.stringify(err.errors, null, 2),
+            });
+        } else {
+            store.addNotification({
+                title: "Welcome!",
+                message: " ",
+                type: "success",
+                insert: "top",
+                container: "top-right",
+                animationIn: ["animate__animated", "animate__fadeIn"],
+                animationOut: ["animate__animated", "animate__fadeOut"],
+                dismiss: {
+                    duration: 5000,
+                    onScreen: true
+                }
+            });
+
+            sessionStorage.setItem("user",res);
+            console.log(sessionStorage.getItem("user"));
+            history.push("/informations");
+            window.location.reload();
+
+
+        }
+
+    }
 
 
 
@@ -115,7 +180,6 @@ export default function Register(props){
         }, "POST", false);
         if (err) {
             setShowLoader(false);
-            alert("Please Change your email adresse")
             console.log(err);
             setError({
                 visible: true,
@@ -152,8 +216,8 @@ export default function Register(props){
                                    onBlur={formik.handleBlur}
                                    value={formik.values.FirstName}
                             />
-                            <div className="text-danger">  {formik.touched.FirstName && formik.errors.FirstName ? <div className='error'>{formik.errors.FirstName}</div> : null}
-                            </div>
+                            <h6 className="text-danger">  {formik.touched.FirstName && formik.errors.FirstName ? <div className='error'>{formik.errors.FirstName}</div> : null}
+                            </h6>
                         </div>
                         <div className="col-sm-6">
                             <label htmlFor="cname" className="sr-only">Last Name</label>
@@ -166,8 +230,8 @@ export default function Register(props){
                                    onBlur={formik.handleBlur}
                                    value={formik.values.LastName}
                             />
-                            <div className="text-danger">  {formik.touched.LastName && formik.errors.LastName ? <div className='error'>{formik.errors.LastName}</div> : null}
-                            </div>
+                            <h6 className="text-danger">  {formik.touched.LastName && formik.errors.LastName ? <div className='error'>{formik.errors.LastName}</div> : null}
+                            </h6>
                         </div>
                     </div>
                     <div className="row">
@@ -182,8 +246,8 @@ export default function Register(props){
                                    onBlur={formik.handleBlur}
                                    value={formik.values.Email}
                             />
-                            <div className="text-danger"> {formik.touched.Email && formik.errors.Email ? <div className='error'>{formik.errors.Email}</div> : null}
-                            </div>
+                            <h6 className="text-danger"> {formik.touched.Email && formik.errors.Email ? <div className='error'>{formik.errors.Email}</div> : null}
+                            </h6>
                         </div>
                         <div className="col-sm-6">
                             <label htmlFor="cname" className="sr-only">Username</label>
@@ -194,8 +258,8 @@ export default function Register(props){
                                    onChange={formik.handleChange}
                                    onBlur={formik.handleBlur}
                                    value={formik.values.username}/>
-                            <div className="text-danger">  {formik.touched.username && formik.errors.username ? <div className='error'>{formik.errors.username}</div> : null}
-                            </div>
+                            <h6 className="text-danger">  {formik.touched.username && formik.errors.username ? <div className='error'>{formik.errors.username}</div> : null}
+                            </h6>
                         </div>
                     </div>
                     <div className="row">
@@ -209,8 +273,8 @@ export default function Register(props){
                                    onChange={formik.handleChange}
                                    onBlur={formik.handleBlur}
                                    value={formik.values.Password}/>
-                            <div className="text-danger"> {formik.touched.Password && formik.errors.Password ? <div className='error'>{formik.errors.Password}</div> : null}
-                            </div>
+                            <h6 className="text-danger"> {formik.touched.Password && formik.errors.Password ? <div className='error'>{formik.errors.Password}</div> : null}
+                            </h6>
                         </div>
                         <div className="col-sm-6">
                             <label htmlFor="cpassword" className="sr-only">Confirm Password</label>
@@ -224,8 +288,8 @@ export default function Register(props){
                                    value={formik.values.confirmpassword
                                    }
                             />
-                            <div className="text-danger">  {formik.touched.confirmpassword && formik.errors.confirmpassword ? <div className='error'>{formik.errors.confirmpassword}</div> : null}
-                            </div>
+                            <h6 className="text-danger">  {formik.touched.confirmpassword && formik.errors.confirmpassword ? <div className='error'>{formik.errors.confirmpassword}</div> : null}
+                            </h6>
                         </div>
                     </div>
 
@@ -243,8 +307,8 @@ export default function Register(props){
                                    value={formik.values.Country}
 
                             />
-                            <div className="text-danger">  {formik.touched.Country && formik.errors.Country ? <div className='error'>{formik.errors.Country}</div> : null}
-                            </div>
+                            <h6 className="text-danger">  {formik.touched.Country && formik.errors.Country ? <div className='error'>{formik.errors.Country}</div> : null}
+                            </h6>
                         </div>
 
                         <div className="col-sm-6">
@@ -257,9 +321,9 @@ export default function Register(props){
                                        onChange={formik.handleChange}
                                        onBlur={formik.handleBlur}
                                        value={formik.values.Phone}/>
-                                <div className="text-danger">{formik.touched.Phone && formik.errors.Phone ?
+                                <h6 className="text-danger">{formik.touched.Phone && formik.errors.Phone ?
                                     <div className='error'>{formik.errors.Phone}</div> : null}
-                                </div>
+                                </h6>
                             </FormikProvider>
 
                         </div>
@@ -274,12 +338,7 @@ export default function Register(props){
                             <i className="icon-long-arrow-right"></i>
                         </button>
 
-                        <div className="custom-control custom-checkbox">
-                            <input type="checkbox" className="custom-control-input"
-                                   id="signin-remember-2"/>
-                            <label className="custom-control-label" htmlFor="signin-remember-2">
-                                I agree to the privacy policy *</label>
-                        </div>
+
 
                     </div>
 
@@ -298,11 +357,14 @@ export default function Register(props){
                             />
                         </div>
                         <div className="col-sm-6">
-                            <a href="#" className="btn btn-login  btn-f">
-                                <i className="icon-facebook-f"></i>
-                                Login With Facebook
-                            </a>
-                        </div>
+
+                        <FacebookLogin
+                            appId="218233472998386"
+                            autoLoad={false}
+                            fields="name,email,picture"
+                            textButton="Register"
+                            callback={responseFacebook} />
+                    </div>
                     </div>
                 </div>
             </div>

@@ -31,11 +31,16 @@ router.post('/register',upload.single('image'),controllerUser.register);
 router.post('/login',controllerUser.login);
 router.put('/updateUser',upload.single('image'),verify,controllerUser.Update);
 router.get('/alluser',controllerUser.getUser);
+
 router.delete('/deleteUser',verify,controllerUser.deleteUser);
 router.post('/forgotPassword',forgotPassword.forgotPassword);
+router.post('/resendPassword',forgotPassword.resendPassword);
+
 //LogIn with Google
 router.post('/api/googleLogin',authenticate.googleLogin);
 router.post('/api/googleRegister',authenticate.googleRegister);
+router.post('/api/facebookLogin',authenticate.facebookLogin);
+router.post('/api/facebookRegister',authenticate.facebookRegister);
 
 //Routes For Prefenrences
 router.post('/addPreferences',verify,preferencesController.addPreferences);
@@ -44,10 +49,13 @@ router.get('/userPreferences',preferencesController.getUserPreferences);
 //Routes for the Shop
 router.get('/products',productController.getProducts);
 router.get('/type',productController.getProductType);
+router.get('/style',productController.getProductStyle);
 router.get('/shop/user',verify,productController.getUsserPref);
 router.get('/filterProduct/:type',productController.filterProduct);
 router.get('/filterProductSize/:size',productController.filterProductSize);
 router.get('/filterProductSex/:sex',productController.filterProductSex);
+router.get('/filterProductStyle/:style',productController.filterProductStyle);
+
 router.post('/addProducts',upload.single('image'),productController.addProducts);
 router.post('/sendMail/:Email',sendMailer.sendMail);
 

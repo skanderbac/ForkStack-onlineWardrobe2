@@ -9,6 +9,8 @@ export default function Type(props){
     console.log(history.location);
     const name=history.location.state.type.toUpperCase();
     console.log(name);
+    const user1=sessionStorage.getItem('user');
+
     const [prod, err, reload] = useApi("filterProduct"+"/"+history.location.state.type);
     return(
         <>
@@ -16,41 +18,18 @@ export default function Type(props){
 
             <main className="main">
 
-            <nav aria-label="breadcrumb" className="breadcrumb-nav border-0 mb-0">
-                <div className="container d-flex align-items-center"><ol className="breadcrumb">
-                    <li className="breadcrumb-item"><a
-                        href="https://portotheme.com/html/molla/index.html">Home</a></li>
-                    <li className="breadcrumb-item"><a href="#">Products</a></li>
-                    <li className="breadcrumb-item active" aria-current="page">Default</li>
-                </ol>
-
-                    <nav className="product-pager ml-auto" aria-label="Product">
-                        <a className="product-pager-link product-pager-prev" href="#" aria-label="Previous"
-                           tabIndex="-1">
-                            <i className="icon-angle-left"></i>
-                            <span>Prev</span>
-                        </a>
-
-                        <a className="product-pager-link product-pager-next" href="#" aria-label="Next"
-                           tabIndex="-1">
-                            <span>Next</span>
-                            <i className="icon-angle-right"></i>
-                        </a>
-                    </nav>
-                </div>
-            </nav>
-
             <div className="page-content">
             <div className="container">
                 <div className="row">
             <Filter></Filter>
-                    <Link
-                        to={{
-                            pathname: '/recommandations'
-                        }}
-                        onClick={() => window.location.href="/recommandations"}>
-                        Recommandations
-                    </Link>
+            {user1 ?( <Link
+                                                to={{
+                                                    pathname: '/recommandations'
+                                                }}
+                                                onClick={() => window.location.href="/recommandations"}>
+                                                Recommandations
+                                            </Link> 
+                                                                                   ):(<h1></h1>)}     
                     {prod?.map((product, key) => (
 
                         <div className="col-6 col-md-4 col-lg-4 col-xl-3">
@@ -79,14 +58,19 @@ export default function Type(props){
                                     </figure>
                                 </div>
 
+
+
+
+
+
                                 <div className="product-body">
                                     <div className="product-cat">
                                         <a>{product.type}</a>
 
                                     </div>
-                                    <h3 className="product-title"><a href="https://portotheme.com/html/molla/product.html">
+                                    <h3 className="product-title">
                                         {product.description}
-                                    </a></h3>
+                                    </h3>
                                     <div className="product-price">
                                         {product.price}$
                                     </div>
@@ -97,12 +81,10 @@ export default function Type(props){
                                         <span className="ratings-text">( 2 Reviews )</span>
                                     </div>
 
-                                    <div className="product-nav product-nav-thumbs">
-
-
-
-                                    </div>
+                                    
                                 </div>
+
+
 
 
                             </div>

@@ -62,12 +62,30 @@ productController.getProductType=async(req,res)=>{
   .catch(error=>{res.status(400).json(error)});
 
 };
+//Retyrn The style of The Products
+productController.getProductStyle=async(req,res)=>{
+  var products=product.aggregate([{$group:{_id:"$style",description:{$push:"$description"},
+                                          style:{$push:"$type"},price:{$push:"$price"},
+                                          image:{$push:"$image"},color:{$push:"$color"},
+                                          quantity:{$push:"$quantity"},Number:{$sum:1}}}]).sort({_id:1})
+  //var products=product.aggregate([{$group:{_id:"$type"}}],{type:true})
+  .then(products=>{res.status(200).send(products)})
+  .catch(error=>{res.status(400).json(error)});
+
+};
 //FilterProduct Accoording the product type
 productController.filterProduct=async(req,res)=>{
   var products=product.find({type:req.params.type}).
   then(products=>{res.status(200).send(products)})
   .catch(error=>{res.status(400).json(error)});
 };
+//FilterProduct Accoording the product type
+productController.filterProductStyle=async(req,res)=>{
+  var products=product.find({style:req.params.style}).
+  then(products=>{res.status(200).send(products)})
+  .catch(error=>{res.status(400).json(error)});
+};
+
 //FilterProduct Accoording the product Size
 productController.filterProductSize=async(req,res)=>{
   var products=product.find({size:req.params.size}).

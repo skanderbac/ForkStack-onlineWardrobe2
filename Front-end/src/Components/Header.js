@@ -1,10 +1,16 @@
 import React, {useState, useContext} from "react";
 import {BrowserRouter, Link} from "react-router-dom";
 import {UserContext} from "../contexts/UserContext";
+import queryApi from "../utils/queryApi";
 
 export default function Header(props) {
     const [user, setUser] = useContext(UserContext);
    const user1=sessionStorage.getItem('user');
+   const Delete=async(response) => {
+       const [res, err] = await queryApi("deleteUser", {}, "DELETE", false);
+       sessionStorage.removeItem('user');
+       window.location.reload();
+   }
 
     return (
         <div className="page-wrapper">
@@ -23,16 +29,6 @@ export default function Header(props) {
                             </div>
                         </div>
 
-                        <div className="header-dropdown">
-                            <a href="#">Eng</a>
-                            <div className="header-menu">
-                                <ul>
-                                    <li><a href="#">English</a></li>
-                                    <li><a href="#">French</a></li>
-                                    <li><a href="#">Spanish</a></li>
-                                </ul>
-                            </div>
-                        </div>
                     </div>
 
                     <div className="header-right">
@@ -40,15 +36,17 @@ export default function Header(props) {
                             <li>
                                 <a href="#">Links</a>
                                 <ul>
-                                    <li><a href="tel:#"><i className="icon-phone"></i>Call: +0123 456 789</a></li>
-                                    <li><a href="https://portotheme.com/html/molla/wishlist.html"><i
-                                        className="icon-heart-o"></i>Wishlist <span>(3)</span></a></li>
-                                    <li><a href="https://portotheme.com/html/molla/about.html">About Us</a></li>
-                                    <li><a href="https://portotheme.com/html/molla/contact.html">Contact Us</a></li>
-                                    <li><a href="#signin-modal" data-toggle="modal"><i
-                                        className="icon-user"></i>Login</a>
-                                    </li>
-                                </ul>
+                                    <li><a><i className="icon-phone"></i>Call: +0123 456 789</a></li>
+
+                                    <li><a>About Us</a></li>
+                                    <li><a>Contact Us</a></li>
+                                    {user1 ?(
+                                        <li><a onClick={Delete}>DeleteAccount</a></li>
+                                        ):
+
+                                        (<h1></h1>)
+                                    }
+                                        </ul>
                             </li>
                         </ul>
                     </div>
@@ -63,10 +61,9 @@ export default function Header(props) {
                             <i className="icon-bars"></i>
                         </button>
 
-                        <a href="https://portotheme.com/html/molla/index.html" className="logo">
-                            <img src="https://portotheme.com/html/molla/assets/images/logo.png" alt="Molla Logo"
+                            <img src="assets/images/onlinewardrobe.png" alt="Molla Logo" style={{width:"150px"}}
                                  width="105" height="25"/>
-                        </a>
+
 
                         <nav className="main-nav">
                             <ul className="menu sf-arrows">
@@ -85,22 +82,10 @@ export default function Header(props) {
                                 </li>
                                 {user1 ?
                                     (<li>
-                                        <a href="#"
+                                        <a href="/mywardrobe"
                                            className="sf-with-ul">My Wardrobe</a>
 
-                                        <ul>
-                                            <li><a href="/all">My Fitting Room</a></li>
-                                            <li><a
-                                                href="/ClothesUser">All My Clothes</a>
-                                            </li>
 
-                                            <li>
-                                                <a href="/addwardrobe">Add To My Wardrobe</a>
-
-                                            </li>
-
-
-                                        </ul>
                                     </li>
                                     ):(<h1></h1>)}
                                 {user1 ?(
