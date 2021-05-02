@@ -16,7 +16,7 @@ export default function Register(props){
         const errors = {}
 
         if (!values.FirstName) {
-            errors.FirstName = 'Please Set Your First '
+            errors.FirstName = 'Please Set Your First Name'
         }
         if (!values.LastName) {
             errors.LastName = 'Please Set Your Last Name'
