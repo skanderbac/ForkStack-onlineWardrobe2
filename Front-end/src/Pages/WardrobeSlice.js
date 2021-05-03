@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import  * as api from "../utils/wardrobe";
-import useApi from "../Hooks/useApi";
 
 
 export const createwardrobe = createAsyncThunk(
@@ -41,6 +40,10 @@ export const WardrobeSlice = createSlice({
     extraReducers: {
         [createwardrobe.fulfilled]: (state, action) => {
             state.values.push(action.payload.data);
+        },
+        [getClasification.fulfilled]: (state, action) => {
+            state.values.push(action.payload.data);
+            console.log(action.payload.data)
         },
     },
 
