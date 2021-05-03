@@ -7,7 +7,7 @@ function AddWardrobeLeft() {
 
     const dispatch = useDispatch();
     const [dress, setdress] = useState({image :"" , description:""})
-    const [img, setImg] = useState("")
+    const [img, setImg] = useState({image:""})
 
     const submit= ()=> {
         dispatch(createwardrobe(dress));
@@ -32,7 +32,7 @@ function AddWardrobeLeft() {
                 <FileBase  
                 type="file"
                 multiple={false}
-                onDone={({ base64 }) =>{setdress({ ...dress, image: base64 });setImg(base64);clasification(base64);}
+                onDone={({ base64 }) =>{setdress({ ...dress, image: base64 });setImg(base64);clasification({ ...dress, image: base64 });}
 
                 }
                 
