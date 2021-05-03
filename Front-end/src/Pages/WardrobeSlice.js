@@ -11,6 +11,14 @@ export const createwardrobe = createAsyncThunk(
     }
 );
 
+export const getClasification = createAsyncThunk(
+    "wardrobe",
+    async (img, thunkAPI) => {
+        const response = await api.getClasification(img);
+        return response.data;
+    }
+);
+
 let initialState = {
     values: [],
 };
