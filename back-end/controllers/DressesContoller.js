@@ -11,7 +11,6 @@ DressesController.getDresses=async(req,res)=>{
     const dresses=Dresses.find()
         .then(dresses=>{res.status(200).json(dresses)})
         .catch(error=>{res.status(400).json(error)})
-
 };
 
 DressesController.add=async(req,res)=>{
