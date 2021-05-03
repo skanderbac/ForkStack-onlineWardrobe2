@@ -17,8 +17,8 @@ function AddWardrobeLeft() {
 
     const clasification=(img)=>{
         console.log(img);
-        //const data=dispatch(getClasification(img));
-        //console.log(data);
+        const data=dispatch(getClasification(img));
+        console.log(data);
     }
 
     return (
