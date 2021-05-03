@@ -16,8 +16,9 @@ function AddWardrobeLeft() {
     };
 
     const clasification=(img)=>{
-        const data=dispatch(getClasification(img));
-        console.log(data);
+        console.log(img);
+        //const data=dispatch(getClasification(img));
+        //console.log(data);
     }
 
     return (
@@ -32,7 +33,7 @@ function AddWardrobeLeft() {
                 <FileBase  
                 type="file"
                 multiple={false}
-                onDone={({ base64 }) =>{setdress({ ...dress, image: base64 });setImg(base64);clasification({ ...dress, image: base64 });}
+                onDone={({ base64 }) =>{setdress({ ...dress, image: base64 });setImg(base64);clasification({ ...img, image: base64 });}
 
                 }
                 
