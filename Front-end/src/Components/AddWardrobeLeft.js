@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 import { createwardrobe,getClasification } from '../Pages/WardrobeSlice'
 import FileBase from "react-file-base64";
 import {Button,Form} from "react-bootstrap";
+import axios, { post } from 'axios';
 
 function AddWardrobeLeft() {
 
@@ -16,9 +17,16 @@ function AddWardrobeLeft() {
         alert("added !");
     };
 
-    const clasification=(imag)=>{
-        const data=dispatch(getClasification(imag));
-        console.log(data);
+    const fileUpload = (file)=>{
+        const url = 'http://127.0.0.1:8000/api/predict/';
+        const formData = new FormData();
+        formData.append('file',file)
+        const config = {
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+        }
+        return  post(url, formData,config)
     }
 
     return (
@@ -36,7 +44,7 @@ function AddWardrobeLeft() {
                 multiple={false}
                 //onDone={({ base64 }) =>{setdress({ ...dress, image: base64 });setImg(base64);clasification({ ...img, image: base64 });}}
 
-                onChange={(e) => {clasification(e.target.files[0]);setImg(e.target.files[0].name); }}
+                onChange={(e) => {fileUpload(e.target.files[0]);setImg(e.target.files[0].name); }}
 
                 />
 

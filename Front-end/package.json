@@ -27,6 +27,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "react-select": "^4.3.0",
+    "react-social-login": "^3.4.13",
     "redux": "^4.0.5",
     "web-vitals": "^1.1.1",
     "yup": "^0.32.9"
