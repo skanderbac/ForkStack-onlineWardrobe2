@@ -181,6 +181,15 @@ controllerUser.googleLogin=async(req,res)=>{
   console.log(token);
 
 }
+controllerUser.profile=async(req,res)=>{
+  var token =req.header('Authorization');
+  var decodetoken=jwtDecode(token);
+  console.log(decodetoken);
+  const user1=User.findOne({_id:decodetoken._id})
+    .then(users=>{res.status(200).json(users);console.log(users)})
+    .catch(error=>{res.status(400).json(error)})
+ 
+  }
 
 module.exports=controllerUser;
 

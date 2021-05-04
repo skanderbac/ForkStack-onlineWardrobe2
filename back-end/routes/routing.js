@@ -11,11 +11,6 @@ var forgotPassword=require('../controllers/userManager/forgotPassword');
 var controllerUser=require( '../controllers/controllerUser');
 var productController=require('../controllers/productController');
 var sendMailer=require('../controllers/userManager/sendMailer');
-
-
-
-
-
 var storage = multer.diskStorage({   
   destination: function(req, file, cb) { 
      cb(null, 'uploads/');    
@@ -31,6 +26,7 @@ router.post('/register',upload.single('image'),controllerUser.register);
 router.post('/login',controllerUser.login);
 router.put('/updateUser',upload.single('image'),verify,controllerUser.Update);
 router.get('/alluser',controllerUser.getUser);
+router.get('/profile',verify,controllerUser.profile);
 
 router.delete('/deleteUser',verify,controllerUser.deleteUser);
 router.post('/forgotPassword',forgotPassword.forgotPassword);

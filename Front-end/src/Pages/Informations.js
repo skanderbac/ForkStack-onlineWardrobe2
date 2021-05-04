@@ -3,13 +3,11 @@ import React, {useState} from "react";
 import * as Yup from "yup";
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
-
 import {useFormik,Field,Formik,FormikProvider} from "formik";
 import CustomSelect from "../Components/CustomSelect";
 import queryApi from "../utils/queryApi";
 export default function Informations(props){
     const [showLoader, setShowLoader] = useState(false);
-
     const [error, setError] = useState({ visible: false, message: "" });
     const history=useHistory();
     const sex = [
