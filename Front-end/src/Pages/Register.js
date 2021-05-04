@@ -4,6 +4,7 @@ import React, {useState} from "react";
 import axios from "axios";
 import  queryApi  from "../utils/queryApi";
 import GoogleLogin from "react-google-login";
+import CustomSelect from "../Components/CustomSelect";
 import {store,ReactNotification}from "react-notifications-component";
 import FacebookLogin from "react-facebook-login";
 export default function Register(props){
@@ -11,10 +12,16 @@ export default function Register(props){
     const history=useHistory();
     const [showLoader, setShowLoader] = useState(false);
     const [error, setError] = useState({ visible: false, message: "" });
+    const Country = [
+        { value: 'Tunisia', label: 'Tunisia' },
+        { value: 'France', label: 'France' },
+        { value: 'Algeria', label: 'Algeria' },
+        { value: 'Egypt', label: 'Egypt'},
 
+    ]
     const validate = values => {
         const errors = {}
-
+    
         if (!values.FirstName) {
             errors.FirstName = 'Please Set Your First Name'
         }
@@ -48,9 +55,9 @@ export default function Register(props){
         }else if (!/^[0-9]+$/i.test(values.Phone)) {
             errors.Phone = 'Invalid email address';
         }else if (values.Phone.length < 8) {
-            errors.Phone = 'Must be 8 characters or more'
+            errors.Phone = 'Must be 8 characters '
         }else if (values.Phone.length >8) {
-            errors.Phone = 'Must be 8 characters or more'
+            errors.Phone = 'Must be 8 characters'
         }
 
 
@@ -297,16 +304,15 @@ export default function Register(props){
                     <div className="row">
                         <div className="col-sm-6">
                             <label htmlFor="cname" className="sr-only">Country</label>
-                            <input type="text"
-                                   className="form-control"
-                                   id="country"
-                                   name="Country"
-                                   placeholder="Country*"
-                                   onChange={formik.handleChange}
-                                   onBlur={formik.handleBlur}
-                                   value={formik.values.Country}
+                                            <CustomSelect
+                                                className='form-control bg-transparent'
+                                                onChange={value=>formik.setFieldValue('Country',value.value)}
+                                                value={formik.values.Country}
+                                                name="Country"
+                                                options={Country}
 
-                            />
+                                            />
+                        
                             <h6 className="text-danger">  {formik.touched.Country && formik.errors.Country ? <div className='error'>{formik.errors.Country}</div> : null}
                             </h6>
                         </div>
