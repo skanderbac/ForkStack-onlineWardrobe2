@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { createwardrobe,getClasification } from '../Pages/WardrobeSlice'
 import FileBase from "react-file-base64";
+import {Button,Form} from "react-bootstrap";
 
 function AddWardrobeLeft() {
 
@@ -15,8 +16,8 @@ function AddWardrobeLeft() {
         alert("added !");
     };
 
-    const clasification=(img)=>{
-        const data=dispatch(getClasification(img));
+    const clasification=(imag)=>{
+        const data=dispatch(getClasification(imag));
         console.log(data);
     }
 
@@ -29,13 +30,14 @@ function AddWardrobeLeft() {
               }
               />
                 <img src={img} />
-                <FileBase  
+
+                <Form.File
                 type="file"
                 multiple={false}
-                onDone={({ base64 }) =>{setdress({ ...dress, image: base64 });setImg(base64);clasification({ ...img, image: base64 });}
+                //onDone={({ base64 }) =>{setdress({ ...dress, image: base64 });setImg(base64);clasification({ ...img, image: base64 });}}
 
-                }
-                
+                onChange={(e) => {clasification(e.target.files[0]);setImg(e.target.files[0].name); }}
+
                 />
 
                 <button onClick={submit} className="btn"> submit </button>
