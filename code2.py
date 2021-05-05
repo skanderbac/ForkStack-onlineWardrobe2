@@ -385,25 +385,29 @@ def measure_distance(segmented_image: object, segmented_arm_image: object, arm_s
     dist_sleeve = (dist5 + dist4) / 2.0
     dist = dist1 + dist2 + dist3
     dist_tuple = dist1, dist2, dist3
-    ShoulderLength = (dist + dist_ans) / 2
-    SleeveLength = (dist4 + dist5) / 2
-    print("Shoulder Length", (dist + dist_ans) / 2)
-    print("Sleeve Length", (dist4 + dist5) / 2)
-    if ShoulderLength <= 40 :
+    SleeveLength = (dist + dist_ans) / 2
+    ShoulderLength = (dist4 + dist5) / 2
+    print("SleeveLength", (dist + dist_ans) / 2)
+    print("ShoulderLength", (dist4 + dist5) / 2)
+    print(SleeveLength)
+    if ShoulderLength <= 40:
         return 'XS'
     else:
-        if 40 < ShoulderLength <= 42 :
+        if 40 < ShoulderLength <= 42:
             return 'S'
-        elif  42 < ShoulderLength <= 43:
-            return 'M'
-        elif  43 < ShoulderLength <= 44:
-            return 'L'
-        elif  44 < ShoulderLength <= 46:
-            return 'XL'
-        elif  46 < ShoulderLength <= 47:
-            return 'XXL'
-        elif  ShoulderLength>47:
-            return 'XXXL'
+        else:
+            if 42 < ShoulderLength <= 43:
+                return 'M'
+            else:
+                if 43 < ShoulderLength <= 44:
+                    return 'L'
+                else:
+                    if 44 < ShoulderLength <= 46:
+                        return 'XL'
+                    else:
+                        if 48 < ShoulderLength:
+                            return 'XXL'
+
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -413,7 +417,7 @@ app = Flask(__name__)
 CORS(app, support_credentials=True)
 
 
-@app.route('/apisize', methods=['POST'])
+@app.route('/api/size', methods=['POST'])
 @cross_origin(supports_credentials=True)
 def getSize():
     # ap = argparse.ArgumentParser()
@@ -464,10 +468,10 @@ def getSize():
     size = measure_distance(segmented_image, segmented_arm_image, arm_spread_image, waist_image, image,
                             metre_pixel_x, metre_pixel_y)
 
-    resp = jsonify({'size':size})
+    resp = jsonify(size)
     return resp
 
 
 # main()
 if __name__ == '__main__':
-    app.run(port=7000, debug=True)
+    app.run(port=9000, debug=True)
