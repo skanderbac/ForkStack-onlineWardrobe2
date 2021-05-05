@@ -4,6 +4,7 @@ var router = express.Router();
 var multer =require('multer');
 var passport=require('passport');
 var DressesController=require('../controllers/DressesContoller');
+var wardrobeController=require('../controllers/wardrobeController');
 var verify =require('../controllers/VerifyToken');
 var preferencesController=require('../controllers/preferencesController');
 var authenticate=require('../controllers/userManager/authenticate');
@@ -11,6 +12,7 @@ var forgotPassword=require('../controllers/userManager/forgotPassword');
 var controllerUser=require( '../controllers/controllerUser');
 var productController=require('../controllers/productController');
 var sendMailer=require('../controllers/userManager/sendMailer');
+const WardrobeController = require('../controllers/wardrobeController');
 var storage = multer.diskStorage({   
   destination: function(req, file, cb) { 
      cb(null, 'uploads/');    
@@ -54,7 +56,9 @@ router.get('/filterProductStyle/:style',productController.filterProductStyle);
 
 router.post('/addProducts',upload.single('image'),productController.addProducts);
 router.post('/sendMail/:Email',sendMailer.sendMail);
-
+router.post('/addWardrobe',wardrobeController.createWardrobe);
+router.get('/getWardrobe/:user_id',WardrobeController.findWardrobe)
+router.delete('/deleteWardrobe/:user_id',wardrobeController.deletewardrobe);
 //Routes For Dresses Controller
 //router.post('/addDress',upload.single('image'),DressesController.add);
 router.post('/pic',DressesController.add);

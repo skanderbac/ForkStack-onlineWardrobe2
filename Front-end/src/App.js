@@ -25,6 +25,7 @@ import ShopSex from "./Components/ShopSex";
 import ForgotPassword from "./Components/ForgotPassword";
 import 'react-notifications-component/dist/theme.css';
 import Style from "./Components/Style";
+import Profile from "./Pages/Profile";
 
 function App() {
     const dispatch = useDispatch();
@@ -66,6 +67,9 @@ function App() {
                                     <Route
                                         path="/wardrobe"
                                         render={(props) => <Wardrobe {...props} />}></Route>
+                                    <Route
+                                        path="/profile"
+                                        render={(props) => <Profile {...props} />}></Route>
                                     <Route
                                         path="/informations"
                                         render={(props) => <Informations {...props} />}

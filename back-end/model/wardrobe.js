@@ -2,8 +2,7 @@ var  mongoose=require('mongoose');
 var Schema =mongoose.Schema;
 var Wardrobe=new Schema({
     user_id:{
-        type:mongoose.Schema.Types.ObjectId,ref:'user1',
-    
+        type:mongoose.Schema.Types.ObjectId,ref:'user',
     },
     style:{
         type:String,
@@ -20,14 +19,8 @@ var Wardrobe=new Schema({
     color:{
         type:String,
     },
-    
-    clothes:[
-        {
-        size:String,
-        color:String,
-        image:String,
-        }],
-
-    
+    size:{
+        type:String,
+    },
 });
 module.exports =mongoose.model('wardrobe',Wardrobe);

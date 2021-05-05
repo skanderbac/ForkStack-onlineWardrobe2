@@ -27,6 +27,7 @@ productController.addProducts=async(req,res)=>{
         color:req.body.color,
         size:req.body.size,
         image:req.file.filename,
+        description:req.body.description,
     });
     try{
         const savedProduct=await Product.save();
