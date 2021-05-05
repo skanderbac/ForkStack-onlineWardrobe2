@@ -28,17 +28,7 @@ function AddWardrobeLeft() {
         }
         return  post(url, formData,config)
     }
-    const getBase64=(file, cb)=> {
-        let reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = function () {
-            return reader.result;
-        };
-        reader.onerror = function (error) {
-            console.log('Error: ', error);
-            return "";
-        };
-    }
+
     return (
         <div>
 
@@ -54,7 +44,7 @@ function AddWardrobeLeft() {
                     multiple={false}
                     //onDone={({ base64 }) =>{setdress({ ...dress, image: base64 });setImg(base64);clasification({ ...img, image: base64 });}}
 
-                    onChange={(e) => {fileUpload(e.target.files[0]);setImg(getBase64(e.target.files[0]));}}
+                    onChange={(e) => {fileUpload(e.target.files[0]);setImg(e.target.files[0].name); }}
 
                 />
 
