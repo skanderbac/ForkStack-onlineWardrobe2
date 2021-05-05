@@ -21,10 +21,22 @@ function AddWardrobeLeft() {
     const setTheImageToURL = () => {
         const data = new FormData();
         data.append('file', img);
-        data.append('upload_preset', 'xlvau7pp');
-        axios.post('https://api.cloudinary.com/v1_1/xlvau7pp/image/upload',data).then((response)=>
-            console.log(response)
-        )
+        data.append('upload_preset', 'px7nwj8x');
+
+        fetch('https://api.cloudinary.com/v1_1/skander/image/upload', {
+            method: 'post',
+            body: data
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data.url);
+                setUrl(data.url);
+                setImg(data.url);
+                setdress({ ...dress, image: data.url })
+            })
+            .catch(err => {
+                console.log(err);
+            });
     };
 
     const fileUpload = (file)=>{
@@ -70,7 +82,7 @@ function AddWardrobeLeft() {
                     multiple={false}
                     //onDone={({ base64 }) =>{setdress({ ...dress, image: base64 });setImg(base64);clasification({ ...img, image: base64 });}}
 
-                    onChange={(e) => {fileUpload(e.target.files[0]);setImg(e.target.files[0]);fileSize(e.target.files[0]); }}
+                    onChange={(e) => {fileUpload(e.target.files[0]);setImg(e.target.files[0]);fileSize(e.target.files[0]);setTheImageToURL(); }}
 
                 />
 
