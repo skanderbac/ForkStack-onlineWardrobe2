@@ -54,6 +54,7 @@ export default function Login(props) {
 
 
             sessionStorage.setItem("user",res);
+            sessionStorage.setItem("user_id",res);
             console.log(sessionStorage.getItem("user"));
             history.push("/home");
             window.location.reload();

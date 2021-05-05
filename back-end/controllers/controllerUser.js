@@ -186,7 +186,7 @@ controllerUser.profile=async(req,res)=>{
   var decodetoken=jwtDecode(token);
   console.log(decodetoken);
   const user1=User.findOne({_id:decodetoken._id})
-    .then(users=>{res.status(200).json(users);console.log(users)})
+    .then(users=>{res.status(200).json(users);})
     .catch(error=>{res.status(400).json(error)})
  
   }

@@ -4,23 +4,17 @@ var Wardrobe=new Schema({
     user_id:{
         type:mongoose.Schema.Types.ObjectId,ref:'user',
     },
-    style:{
-        type:String,
-    },
     image:{
         type:String,
     },
-    name:{
-        type:String,
-    },
-    description:{
-        type:String,
-    },
-    color:{
-        type:String,
+    description: {
+        type: String,
     },
     size:{
-        type:String,
+        type: String,
     },
+    type:{
+        type: String,
+    }
 });
 module.exports =mongoose.model('wardrobe',Wardrobe);

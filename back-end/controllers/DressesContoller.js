@@ -15,6 +15,7 @@ DressesController.getDresses=async(req,res)=>{
 
 DressesController.add=async(req,res)=>{
     try {
+        console.log(req.body)
         const doc = await Dresses.create(req.body);
     
         res.status(201).json({

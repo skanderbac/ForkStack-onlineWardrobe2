@@ -1,42 +1,65 @@
-import React, { useState } from 'react'
+import React, {useReducer, useState} from 'react'
 import { useDispatch } from 'react-redux'
 import { createwardrobe,getClasification } from '../Pages/WardrobeSlice'
 import FileBase from "react-file-base64";
 import {Button,Form} from "react-bootstrap";
 import axios, { post } from 'axios';
+import useApi from "../Hooks/useApi";
+
 
 function AddWardrobeLeft() {
-
+    const [users, err, reload] = useApi("profile");
+    const [user, setUser] = useState("")
+    var userid="";
+    var i=0;
+    if(users!==null){
+        userid=users._id;
+    }
+    console.log(userid)
     const dispatch = useDispatch();
-    const [dress, setdress] = useState({image :"" , description:""})
-    const [img, setImg] = useState()
+    const [dress, setdress] = useState({image :"" , description:"",user_id:user,size:"M",type:"Shirt"})
+    const [img, setImg] = useState("")
     const [url, setUrl] = useState("")
 
     const submit= ()=> {
-        dispatch(createwardrobe(dress));
-        console.log(dress);
-        alert("added !");
+        if(  (dress.description==="") || (dress.size==="") || (dress.type==="") ){
+            alert("invalid Form!");
+        }
+        else{
+            dispatch(createwardrobe(dress));
+            console.log(dress);
+            alert("added !");
+        }
+
     };
 
     const setTheImageToURL = () => {
         const data = new FormData();
         data.append('file', img);
         data.append('upload_preset', 'px7nwj8x');
+        axios.post(
+            "https://api.cloudinary.com/v1_1/skander/image/upload",
+            data
+        ).then((response)=>{
+            setImg(response.url);
+            console.log(response.url);
+            setdress({ ...dress, image: data.url })
+        })
 
-        fetch('https://api.cloudinary.com/v1_1/skander/image/upload', {
+        /*fetch('https://api.cloudinary.com/v1_1/skander/image/upload', {
             method: 'post',
             body: data
         })
             .then(res => res.json())
-            .then(data => {
-                console.log(data.url);
-                setUrl(data.url);
-                setImg(data.url);
-                setdress({ ...dress, image: data.url })
+            .then(d => {
+                console.log(d.url);
+                setUrl(d.url);
+                setImg(d.url);
+                setdress({ ...dress, image: d.url })
             })
             .catch(err => {
                 console.log(err);
-            });
+            });*/
     };
 
     const fileUpload = (file)=>{
