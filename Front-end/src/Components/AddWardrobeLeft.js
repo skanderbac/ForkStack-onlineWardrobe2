@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 import { createwardrobe,getClasification } from '../Pages/WardrobeSlice'
 import FileBase from "react-file-base64";
 import {Button,Form} from "react-bootstrap";
+import axios, { post } from 'axios';
 
 function AddWardrobeLeft() {
 
@@ -16,33 +17,50 @@ function AddWardrobeLeft() {
         alert("added !");
     };
 
-    const clasification=(imag)=>{
-        const data=dispatch(getClasification(imag));
-        console.log(data);
+    const fileUpload = (file)=>{
+        const url = 'http://127.0.0.1:8000/api/predict/';
+        const formData = new FormData();
+        formData.append('file',file)
+        const config = {
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+        }
+        return  post(url, formData,config)
     }
-
+    const getBase64=(file, cb)=> {
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+            return reader.result;
+        };
+        reader.onerror = function (error) {
+            console.log('Error: ', error);
+            return "";
+        };
+    }
     return (
         <div>
 
             <div className="form">
                 <input type="text" className="form-control" placeholder="description" onChange={(e) =>
-                setdress({ ...dress, description: e.target.value })
-              }
-              />
+                    setdress({ ...dress, description: e.target.value })
+                }
+                />
                 <img src={img} />
 
                 <Form.File
-                type="file"
-                multiple={false}
-                //onDone={({ base64 }) =>{setdress({ ...dress, image: base64 });setImg(base64);clasification({ ...img, image: base64 });}}
+                    type="file"
+                    multiple={false}
+                    //onDone={({ base64 }) =>{setdress({ ...dress, image: base64 });setImg(base64);clasification({ ...img, image: base64 });}}
 
-                onChange={(e) => {clasification(e.target.files[0]);setImg(e.target.files[0].name); }}
+                    onChange={(e) => {fileUpload(e.target.files[0]);setImg(getBase64(e.target.files[0]));}}
 
                 />
 
                 <button onClick={submit} className="btn"> submit </button>
-             </div>
-            
+            </div>
+
         </div>
     )
 }
