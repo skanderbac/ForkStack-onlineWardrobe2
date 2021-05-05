@@ -9,12 +9,22 @@ function AddWardrobeLeft() {
 
     const dispatch = useDispatch();
     const [dress, setdress] = useState({image :"" , description:""})
-    const [img, setImg] = useState({image:""})
+    const [img, setImg] = useState()
+    const [url, setUrl] = useState("")
 
     const submit= ()=> {
         dispatch(createwardrobe(dress));
         console.log(dress);
         alert("added !");
+    };
+
+    const setTheImageToURL = () => {
+        const data = new FormData();
+        data.append('file', img);
+        data.append('upload_preset', 'xlvau7pp');
+        axios.post('https://api.cloudinary.com/v1_1/xlvau7pp/image/upload',data).then((response)=>
+            console.log(response)
+        )
     };
 
     const fileUpload = (file)=>{
@@ -27,6 +37,22 @@ function AddWardrobeLeft() {
             }
         }
         return  post(url, formData,config)
+    }
+
+    const fileSize= (file)=>{
+
+        const url = 'http://127.0.0.1:7000/apisize';
+        const formData = new FormData();
+        formData.append('file1',file);
+        formData.append('file2',file);
+        formData.append('file3',file);
+        const config = {
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+        }
+        console.log("tesst")
+        post(url, formData,config).then((rep)=>console.log(rep.size))
     }
 
     return (
@@ -44,7 +70,7 @@ function AddWardrobeLeft() {
                     multiple={false}
                     //onDone={({ base64 }) =>{setdress({ ...dress, image: base64 });setImg(base64);clasification({ ...img, image: base64 });}}
 
-                    onChange={(e) => {fileUpload(e.target.files[0]);setImg(e.target.files[0].name); }}
+                    onChange={(e) => {fileUpload(e.target.files[0]);setImg(e.target.files[0]);fileSize(e.target.files[0]); }}
 
                 />
 
