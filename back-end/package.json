@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "heroku-postbuild":"NPM_CONFIG_PRODUCTION=false npm install --prefix Front-end && npm run build --prefix Front-end "
   },
   "dependencies": {
     "@hapi/joi": "^17.1.1",
