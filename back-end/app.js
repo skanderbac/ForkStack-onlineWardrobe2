@@ -45,8 +45,11 @@ app.use(function(req, res, next) {
   next(createError(404));
 });
 //All the css and javascript fime will be read from this location
-app.use(express.static("Front-end/build"));
-app.get("*",(req,res)=>{res.sendFile(path.resolve(__dirname,"../Front_end","build","index.html"))});
+app.use(express.static('../Front-end/build'))
+
+app.get('*',(req,res)=>{
+  res.sendFile(path.resolve(__dirname,"../Front-end","build","index.html"))});
+
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
