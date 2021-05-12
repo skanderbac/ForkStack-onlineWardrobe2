@@ -1,7 +1,7 @@
 {
 
     "mongo": {
-      "uri": "mmongodb+srv://samar:09870358@forkstack.cf3jm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+      "uri": "mongodb://localhost:27017/OnlineWardrobe"
     }
  
  
