@@ -44,11 +44,7 @@ app.get('/google/callback',passport.authenticate('google',{failureRedirect:'/log
 app.use(function(req, res, next) {
   next(createError(404));
 });
-//All the css and javascript fime will be read from this location
-app.use(express.static('../Front-end/build'))
 
-app.get('*',(req,res)=>{
-  res.sendFile(path.resolve(__dirname,"client","build","index.html"))});
 
 // error handler
 app.use(function(err, req, res, next) {
