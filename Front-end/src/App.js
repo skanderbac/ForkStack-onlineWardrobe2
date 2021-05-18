@@ -124,10 +124,6 @@ function App() {
                                     <Route
                                         path="/forgotPassword"
                                         render={(props) => <ForgotPassword {...props} />}></Route>
-                                    <Route
-                                        path="/mywardrobe"
-                                        render={(props) => <MyWardrobe {...props} />}
-                                    ></Route>
                                     <Route path="/resetPassword/:id"
                                         render={(props) => <ResetPassword {...props} />}></Route>
                                     <Route

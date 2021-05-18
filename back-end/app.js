@@ -17,9 +17,15 @@ const WardrobeRouting = require('./routes/WardrobeRouting')
 dotenv.config();
 var app = express();
 app.use(cors());
-mongoose.connect(config.mongo.uri,
+const uri = "mongodb+srv://skander:skanderbaccouche@cluster0.74lqe.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+mongoose.connect(uri,
     {useNewUrlParser:true,useUnifiedTopology:true,useFindAndModify: false},
     ()=>console.log("connected todatabase"));
+
+/*const MongoClient = require('mongodb').MongoClient;
+const uri = "mongodb+srv://skander:skanderbaccouche@cluster0.74lqe.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+client.connect();*/
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -44,9 +50,8 @@ app.get('/google/callback',passport.authenticate('google',{failureRedirect:'/log
 app.use(function(req, res, next) {
   next(createError(404));
 });
-//All the css and javascript fime will be read from this location
-app.use(express.static("Front-end/build"));
-app.get("*",(req,res)=>{res.sendFile(path.resolve(__dirname,"../Front_end","build","index.html"))});
+
+
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development

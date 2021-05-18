@@ -2,65 +2,59 @@ import React, {useReducer, useState} from 'react'
 import { useDispatch } from 'react-redux'
 import { createwardrobe,getClasification } from '../Pages/WardrobeSlice'
 import FileBase from "react-file-base64";
-import {Button,Form} from "react-bootstrap";
+import {Form} from "react-bootstrap";
 import axios, { post } from 'axios';
 import useApi from "../Hooks/useApi";
 
 
 function AddWardrobeLeft() {
-    const [users, err, reload] = useApi("profile");
-    const [user, setUser] = useState("")
-    var userid="";
-    var i=0;
-    if(users!==null){
-        userid=users._id;
-    }
-    console.log(userid)
+
+    const token = sessionStorage.getItem("user");
+    console.log(token)
     const dispatch = useDispatch();
-    const [dress, setdress] = useState({image :"" , description:"",user_id:user,size:"M",type:"Shirt"})
+    const [dress, setdress] = useState({image :"" , description:"",user_id:token,size:"M",type:"Shirt"})
     const [img, setImg] = useState("")
     const [url, setUrl] = useState("")
 
     const submit= ()=> {
         if(  (dress.description==="") || (dress.size==="") || (dress.type==="") ){
             alert("invalid Form!");
+            setTheImageToURL()
         }
         else{
             dispatch(createwardrobe(dress));
             console.log(dress);
             alert("added !");
+            window.location.reload();
         }
 
     };
 
-    const setTheImageToURL = () => {
+    const setTheImageToURL = async() => {
         const data = new FormData();
+
         data.append('file', img);
         data.append('upload_preset', 'px7nwj8x');
-        axios.post(
-            "https://api.cloudinary.com/v1_1/skander/image/upload",
-            data
-        ).then((response)=>{
-            setImg(response.url);
-            console.log(response.url);
-            setdress({ ...dress, image: data.url })
-        })
+        data.append('api_key', 844693761588111);
+        data.append('cloud_name', 'skander');
 
-        /*fetch('https://api.cloudinary.com/v1_1/skander/image/upload', {
+        await fetch('https://api.cloudinary.com/v1_1/skander/image/upload', {
             method: 'post',
             body: data
         })
             .then(res => res.json())
-            .then(d => {
-                console.log(d.url);
-                setUrl(d.url);
-                setImg(d.url);
-                setdress({ ...dress, image: d.url })
+            .then(data => {
+                console.log(data.url);
+                setdress({ ...dress, image: data.url });
+                setImg(data.url.toString())
             })
             .catch(err => {
                 console.log(err);
-            });*/
+            });
+
+
     };
+
 
     const fileUpload = (file)=>{
         const url = 'http://127.0.0.1:8000/api/predict/';
@@ -73,6 +67,7 @@ function AddWardrobeLeft() {
         }
         return  post(url, formData,config)
     }
+
 
     const fileSize= (file)=>{
 

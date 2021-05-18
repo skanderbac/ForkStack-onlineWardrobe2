@@ -41,7 +41,7 @@ const AOUTH=new OAuth2Client(
          authenticate.googleLogin=async(req,res)=>{
           const tokenId=req.body.tokenId
           const verify=await AOUTH.verifyIdToken({
-            idToken:tokenId,audience:"224688907368-fpdv128j9kb8e78c3qaal8nso19u2v69.apps.googleusercontent.com"});
+            idToken:tokenId,audience:"224688907368-q2bju71e4sdql8770qcitrvl4r0u7kc4.apps.googleusercontent.com"});
             const user=await User.findOne({Email:verify.getPayload().email});
             if(!user) return res.status(400).send("Email is wrong");
             sendMailer.googleLogin(user.Email);

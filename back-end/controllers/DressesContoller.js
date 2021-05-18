@@ -1,7 +1,7 @@
 var express = require('express');
 var Dresses=require('../model/dresses');
 var DressesController={};
-
+const  jwtDecode  = require('jwt-decode');
 DressesController.getAll=
     async (req, res, next)=>{
         res.render('index', { title: 'Express' });
@@ -15,6 +15,8 @@ DressesController.getDresses=async(req,res)=>{
 
 DressesController.add=async(req,res)=>{
     try {
+
+        req.body.user_id=jwtDecode(req.body.user_id);
         console.log(req.body)
         const doc = await Dresses.create(req.body);
     
@@ -24,7 +26,7 @@ DressesController.add=async(req,res)=>{
          
         });
       } catch (error) {
-        next(error);
+
       }
     }
 

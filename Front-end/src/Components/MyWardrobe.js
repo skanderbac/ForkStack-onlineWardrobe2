@@ -41,6 +41,7 @@ export default function Categories(props) {
         },
     ];
 
+
     const renderBoxes= (box,index1) => {
         return(
             <div className="filter-item" key={index1}>
@@ -56,7 +57,28 @@ export default function Categories(props) {
             </div>
         );
     };
+    const setTheImageToURL = () => {
+        const data = new FormData();
 
+        data.append('file', "");
+        data.append('upload_preset', 'px7nwj8x');
+        data.append('api_key', 844693761588111);
+        data.append('cloud_name', 'skander');
+
+        fetch('https://api.cloudinary.com/v1_1/skander/image/upload', {
+            method: 'post',
+            body: data
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data.url);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+
+
+    };
 
     /*const DressesInfo=[axios.get("http://localhost:3000/allDresses").then(response =>{ return response})];
     console.log(DressesInfo);*/
@@ -166,7 +188,7 @@ export default function Categories(props) {
                     <AddWardrobeLeft></AddWardrobeLeft>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={() =>setStatsModal(false)}>Close</Button>
+                    <Button onClick={() =>{setStatsModal(false);setTheImageToURL()}}>Close</Button>
                 </Modal.Footer>
             </Modal>
             <main className="main">
